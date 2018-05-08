@@ -22,4 +22,4 @@ A description of any optional features, which you can do if you have enough time
 I would like to explore the option of creating a database of all textbooks used in UCSC to make selecting/ identifying textbooks more accessible, as well as make it possible to buy textbooks by also looking up certain classes. I also might just implement a simple ISBN lookup as a bare minimum.
 
 A description of how do you plan to divide roles or tasks among team members:
-I am working on this project as a solo member but if things change, I will make the appropriate announcements and acknowledgements. At present I plan on creating a roadmap as well as deadlines for certain website functionality. 
+I am working on this project as a solo member but if things change, I will make the appropriate announcements and acknowledgements. At present I plan on creating a roadmap as well as deadlines for certain website functionality. 
