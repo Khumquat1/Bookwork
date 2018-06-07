@@ -64,7 +64,11 @@
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav navbar-right">
+<<<<<<< HEAD
             {{='auth' in globals() and auth.navbar('',mode='dropdown') or ''}}
+=======
+            {{='auth' in globals() and auth.navbar('Welcome',mode='dropdown') or ''}}
+>>>>>>> 24c2738ede7f1e7bcc4f024438b3e85968550675
           </ul>
           {{if response.menu:}}
           {{=MENU(response.menu, _class='nav navbar-nav',li_class='dropdown',ul_class='dropdown-menu')}}

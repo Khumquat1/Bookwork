@@ -1,10 +1,20 @@
 def get_posts():
+<<<<<<< HEAD
     posts = []
     rows = db().select(db.post.ALL, orderby=~db.post.created_on)
+=======
+    start_idx = int(request.vars.start_idx) if request.vars.start_idx is not None else 0
+    end_idx = int(request.vars.end_idx) if request.vars.end_idx is not None else 0
+    posts = []
+    has_more = False
+
+    rows = db().select(db.post.ALL, orderby=~db.post.created_on, limitby=(start_idx, end_idx + 1))
+>>>>>>> 24c2738ede7f1e7bcc4f024438b3e85968550675
     for i, r in enumerate(rows):
         t = dict(
             id=r.id,
             user_email=r.user_email,
+<<<<<<< HEAD
             title=r.title,
             description=r.description,
             book_price=r.book_price,
@@ -15,6 +25,17 @@ def get_posts():
         posts.append(t)
     return response.json(dict(
         posts=posts,
+=======
+            content=r.post_content,
+            created_on=r.created_on,
+            is_public=r.is_public
+        )
+        posts.append(t)
+    logged_in = auth.user_id is not None
+    return response.json(dict(
+        posts=posts,
+        logged_in=logged_in,
+>>>>>>> 24c2738ede7f1e7bcc4f024438b3e85968550675
     ))
 
 @auth.requires_signature()
