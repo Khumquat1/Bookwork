@@ -13,7 +13,7 @@ p, li {margin-bottom:0.5em}
 p {text-align:justify}
 label, strong {font-weight:bold}
 ul {list-style-type:none; padding-left:20px}
-a {text-decoration:none; color:#26a69a; white-space:nowrap}
+a {text-decoration:none; color: #0f0092; white-space:nowrap}
 a:hover {cursor:pointer}
 h1,h2,h3,h4,h5,h6{font-weight:bold}
 h1{font-size:4em; margin:1.0em 0 0.25em 0}
@@ -40,7 +40,7 @@ header, main, footer {display:block; with:100%} /* IE fix */
 }
 
 /*** buttons ***/
-.btn, button, [type=button], [type=submit] {padding:0.5em 1em; margin:0 0.5em 0.5em 0; display:inline-block; background-color:#26a69a; color:white}
+.btn, button, [type=button], [type=submit] {padding:0.5em 1em; margin:0 0.5em 0.5em 0; display:inline-block; background-color: #1167a6; color:white}
 .btn:hover, button:hover, [type=button]:hover, [type=submit]:hover {box-shadow:0 0 10px #666; text-decoration:none; cursor:pointer}
 .btn.small, table .btn {padding:0.25em 0.5em; font-size:0.8em}
 .btn.large {padding:1em 2em; font-size:1.2em}
@@ -49,6 +49,12 @@ header, main, footer {display:block; with:100%} /* IE fix */
 /*** helpers ***/
 .rounded {-moz-border-radius:5px; border-radius:5px}
 .padded {padding:10px 20px}
+.padded-LR {padding:0px 20px}
+.padded-LRT {padding-top:10px; padding-left: 20px; padding-right: 20px}
+.img_pad {padding-top: 5px; padding-bottom: 5px !important}
+.item_desc_pad {padding: 10px 10px !important}
+.top_bar_buttons {padding-bottom: 20px !important; padding-left: 20px; padding-right: 20px}
+.center_page_pad {padding: 10px 120px !important}
 .center {text-align:center; margin-left:auto; margin-right:auto}
 .center>div {text-align:left}
 .right {right:0; text-align:right}
@@ -57,13 +63,22 @@ header, main, footer {display:block; with:100%} /* IE fix */
 .xscroll {overflow-x:scroll !important}
 .yscroll {overflow-y:scroll !important}
 .nowrap {white-space:nowrap; overflow-x:hidden}
+.shrink {width: 200px; height: 200px; !important}
+.spacedLR {margin-left:50px; margin-right:50px}
+.spacedhalf {margin-bottom:10px; margin-top:17px}
 .fill {width:100%}
 .lifted {box-shadow:5px 5px 10px #666}
 .relative {position:relative}
 .relative>div {position:absolute}
 .spaced {margin-bottom:20px; margin-top:20px}
 .hidden {display:none !important}
-
+.preview {padding:4px; border:1px inset; width:500px; height:200px; !important}
+.post_text{
+    width: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #000000; !important
+}
 /*** forms ***/
 input:not([type]), input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]), [type=file]:before {outline:none; padding:0.5em 1em; margin:0.5px; border-bottom:1px solid #ddd; width:100%}
 textarea {width:100%; border:1px solid #ddd; padding:4px 8px; outline:none; outline:none}
@@ -245,7 +260,8 @@ input:invalid, input.error, textarea:invalid, textarea.error {background: #ffdfd
 
 /**** underline effect ***/
 a:not(.btn):not(.noeffect) {position:relative}
-a:not(.btn):not(.noeffect):hover {color:#26a69a}
+a:not(.btn):not(.noeffect):hover {color: #1339a6
+}
 a:not(.btn):not(.noeffect):hover:after {width:100%}
 a:not(.btn):not(.noeffect):after {
   display:block;
@@ -254,7 +270,7 @@ a:not(.btn):not(.noeffect):after {
   bottom:-1px;
   width:0;
   height:2px;
-  background-color:#26a69a;
+  background-color: #166ab8;
   content:"";
   transition:width 0.2s;
 }
@@ -332,28 +348,10 @@ a:not(.btn):not(.noeffect):after {
 
 
 /*** cards from http://codepen.io/edeesims/pen/iGDzk ***/
-.card {perspective: 500px; max-width:100%}
-.card>div {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  transition: transform 1s;
-  transform-style: preserve-3d;
-}
-.card:hover>div {
-  transform: rotateY( 180deg ) ;
-  transition: transform 0.5s;
-}
-.card>div>div {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  backface-visibility: hidden;
-}
-.card>div>div:nth-child(2) {
-  transform: rotateY( 180deg );
-}
+.card {perspective: 100px; max-width:100%;
+  width: 300px;
+  height: 300px;}
+
 
 /**** tags ****/
 .tags > span {
@@ -372,15 +370,4 @@ a:not(.btn):not(.noeffect):after {
 .tags.dismissible > span.off:hover {background-color:#26a69a}
 
 /*** colors from http://clrs.cc/ ***/
-.navy{background-color:#001f3f;color:white}.blue{background-color:#0074d9;color:white}.aqua{background-color:#7fdbff;color:#111111}.teal{background-color:#39cccc;color:white}.olive{background-color:#3d9970;color:white}.green{background-color:#2ecc40;color:white}.aquamarine{background-color:#26a69a;color:white}.lime{background-color:#01ff70;color:#111111}.yellow{background-color:#ffdc00;color:#111111}.orange{background-color:#ff851b;color:white}.red{background-color:#cc1f00;color:white}.fuchsia{background-color:#f012be;color:white}.pink{background-color:#ee6e73;color:white}.purple{background-color:#b10dc9;color:white}.maroon{background-color:#85144b;color:white}.white{background-color:#fff;color:#111111;-webkit-box-shadow:inset 0px 0px 0px 1px #ddd;-moz-box-shadow:inset 0px 0px 0px 1px #ddd;box-shadow:inset 0px 0px 0px 1px #ddd}.gray{background-color:#aaa;color:white}.silver{background-color:#f1f1f1;color:#111111}.black{background-color:#111111;color:white}.glass{background:rgba(255,255,255,0.5);color:#111111}
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          .disabled{
-background-color:#7a7b7c !important;
-color:white;
-cursor: default;
-pointer-events: none;
-}
-
-.disabled-icon{
-opacity:.5
-}
+.navy{background-color: #82ff64;color:white}  .blue{background-color:#0074d9;color:white}  .aqua{background-color:#7fdbff;color:#111111}  .teal{background-color:#39cccc;color:white}  .olive{background-color:#3d9970;color:white}  .green{background-color:#2ecc40;color:white}  .aquamarine{background-color:#26a69a;color:white}  .lime{background-color:#01ff70;color:#111111}  .yellow{background-color:#ffdc00;color:#111111}  .orange{background-color:#ff851b;color:white}  .red{background-color:#cc1f00;color:white}  .fuchsia{background-color:#f012be;color:white}  .pink{background-color:#ee6e73;color:white}  .purple{background-color:#b10dc9;color:white}  .maroon{background-color:#85144b;color:white}  .white{background-color:#fff;color:#111111;-webkit-box-shadow:inset 0px 0px 0px 1px #ddd;-moz-box-shadow:inset 0px 0px 0px 1px #ddd;box-shadow:inset 0px 0px 0px 1px #ddd}  .gray{background-color:#aaa;color:white}  .silver{background-color:#f1f1f1;color:#111111}  .black{background-color:#111111;color:white}  .glass{background:rgba(255,255,255,0.5);color:#111111}

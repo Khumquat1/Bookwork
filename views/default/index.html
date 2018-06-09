@@ -1,100 +1,196 @@
 {{extend 'layout.html'}}
 
 {{block head}}
+
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
-    var posts_url = "{{=URL('api', 'get_posts')}}";
-    var add_post_url = "{{=URL('api', 'add_post', user_signature=True)}}";
-    var edit_post_url = "{{=URL('api', 'edit_post', user_signature=True)}}";
-    var del_post_url = "{{=URL('api', 'del_post', user_signature=True)}}";
-    var toggle_vis_url = "{{=URL('api', 'toggle_vis', user_signature=True)}}";
+  var add_image_url = "{{=URL('api', 'add_image', user_signature=True)}}";
+  var add_image_url_np = "{{=URL('api', 'add_image_np', user_signature=True)}}";
+  var image_url = "{{=URL('api', 'get_user_images', user_signature=False)}}";
+  var log_user_url = "{{=URL('api', 'log_user', user_signature=False)}}";
+  var all_image_url = "{{=URL('api', 'get_images', user_signature=False)}}";
+  var all_follows_url = "{{=URL('api', 'get_follows', user_signature=False)}}";
+  var set_price_url = "{{=URL('api', 'set_price', user_signature=True)}}";
+  var follow_post_url = "{{=URL('api', 'follow', user_signature=True)}}";
+  var del_post_url = "{{=URL('api', 'del_post', user_signature=True)}}";
+  var unfollow_url = "{{=URL('api', 'unfollow', user_signature=True)}}";
+  var clear_follows_url = "{{=URL('api', 'clear_follows', user_signature=True)}}";
 </script>
+
+
 {{end}}
+
 
 <div class="main_content">
 
-    <div id="vue-div" class="display:none">
-        {{if auth.user is not None:}}
-        <div class="button_bar">
-            <button v-if="!is_adding_post" class="btn btn-info btn-sm" v-on:click="add_post_button()">
-                Add new post
-            </button>
+
+  <div id="vue-div" class="display:none">
+    <!-- Your code goes here.  Remember to call $("#vue-div").show() once you get the data for the first time. -->
+        <div v-if="home_page">
+            <div class="container padded">
+                <button  v-on:click="go_post_page()" class="right white"> <i class="fa fa-plus ">Post</i></button>
+                <!-- Left part of the page -->
+                  <!-- Code to upload files, with control buttons -->
+                <div class="image_container">
+
+                  <ul class="container">
+                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
+                      <li v-for="image in user_images"  class="card lifted quarter spacedLR spaced" id="post_images">
+                          <a>
+                              <img @click="show_item(image._idx)" v-bind:src="image.image_url" height="230" width="260" class=" right spacedhalf "/>
+                          </a>
+
+                          <p class=" center quarter">
+
+                              <button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>
+                              <button class="left white small fa fa-star-o" v-on:click="follow_post(image.id)"></button>
+                              <div @click="show_item(image._idx)" class="post_title center">
+                                <a class="strong">${image.title}</a></div>
+                              <a class="white right">$${image.image_price}</a>
+                          </p>
+
+                      </li>
+                  </ul>
+
+                </div>
+
+            </div>
+
         </div>
+        <div v-if="post_page">
+            {{if auth.user is not None:}}
+            <div class="container main max900">
+                <button v-on:click="go_home">back </button>
+                      <div class="title_cost container spaced">
 
+                          <div class="title half left">
+                          <p>Post Title</p>
+                          <input class="form-control string "  v-model="post_title"
+                                placeholder="Enter book name here" type="text" >
+                          </div>
+                          <div class="price quarter">
+                              <p>price</p>
+                              <input  v-model.number="image_price" placeholder="Enter the price:" type="number" step="any" min="0">
+                          </div>
+                      </div>
 
-        <div v-if="is_adding_post" id="add-new-post">
-                <div>
-                    <textarea class="form-control string" id="no_table_content" v-model="form_content"
-                              placeholder="Enter text here" type="text" ></textarea>
-                    <span class="help-block"></span>
-                </div>
+                      <div class="body spaced">
+                          <textarea rows="10" class="form-control string "  v-model="post_description"
+                                placeholder="Enter description" type="text" ></textarea>
+                      </div>
 
-
-                <div>
-                    <button class="btn btn-success btn-sm post-button" v-on:click="add_post()">
-                        Post
-                    </button>
-                    <button v-if="is_adding_post" class="btn btn-danger btn-sm" v-on:click="add_post_button()">
-                     Cancel
-                     </button>
-                </div>
-        </div>
-
-        {{else:}}
-            <p>This is a single-page memo tracker. Login or sign up to create/ edit posts!</p>
-                    {{pass}}
-        <div class="result_table">
-            <div v-for="post in posts">
-                {{if auth.user is None:}}
-                <div v-if="post.is_public">
-                     <div class="post text-left post-content">
-                        <p>${post.content}</p>
-                    </div>
-                </div>
-                {{else:}}
-
-                <div v-if="post.is_public || post.user_email == '{{=auth.user.email}}' ">
-                    <div class="post text-left post-content">
-                        <div v-if="editing && edit_id==post.id">
-
-                            <div class="form-group" id="no_table_content__row">
-                                <div>
-                                    <textarea class="form-control string" id="no_table_content" v-model="edit_content = post.content"
-                                              placeholder="Enter text here" type="text" ></textarea>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row edit-buttons" id="submit_record__row">
-
-                                <div class="col-md-6 ">
-                                    <button v-if="editing" class="btn btn-success btn-sm post-edit-button" v-on:click="edit_post_submit()" type="submit">
-                                        Post
-                                    </button>
-                                    <button v-if="editing" class="btn btn-danger btn-sm cancel-button" v-on:click="cancel_edit()" type="button">
-                                        Cancel
-                                    </button>
-
-                                </div>
-
-                            </div>
+                    <div v-for="user in users" v-if="user.user_email == '{{=auth.user.email}}'" class="contact_info right">
+                        <div class="email_options">
+                            <p class="padded-LRT">User email: ${user.user_email} </p>
+                            <p class="padded-LR"> Hide email
+                                <input v-if="show_email" type="checkbox" v-on:click="toggle(3)">
+                                <input v-if="!show_email"  checked type="checkbox" v-on:click="toggle(3)">
+                            </p>
                         </div>
-                        <div v-if="!editing || (editing && edit_id != post.id)">
-                            <p>${post.content}</p>
-                        </div>
-
-                        <div v-if="post.user_email == '{{=auth.user.email}}'">
-                            <i class="fa fa-pencil" v-on:click="edit_post(post.id)"></i>
-                            <i class="fa fa-trash-o" v-on:click="delete_track(post.id)"></i>
-                            <i v-if="post.is_public" v-on:click="toggle_vis(post.id)" class="fa fa-users"></i>
-                            <i v-if="!post.is_public" v-on:click="toggle_vis(post.id)" class="fa fa-user"></i>
+                        <div class="phone_options container  left">
+                            <div class="padded-LR">
+                                <input placeholder="Phone Number (optional)" type="text" v-model="post_phone_number">
+                            </div>
+                            <p class="padded-LR"> Text
+                                <input v-if="!text_ok" type="checkbox" v-on:click="toggle(1)">
+                                <input v-if="text_ok"  checked type="checkbox" v-on:click="toggle(1)">
+                                Call
+                                <input v-if="!call_ok"  type="checkbox" v-on:click="toggle(2)">
+                                <input v-if="call_ok" checked type="checkbox" v-on:click="toggle(2)">
+                            </p>
                         </div>
                     </div>
-                </div>
-                    {{pass}}
+                <button class="spaced"v-on:click="go_post_page_2">Continue</button>
+
             </div>
         </div>
-    </div>
+
+        <div v-if="post_page_2">
+            <div class="main_page container">
+
+                <div class="padded half ">
+                    <button class="spaced" v-on:click="go_post_page">back</button>
+                    <button class="spaced"v-on:click="add_post">Publish</button>
+                    <div id="uploader_div">
+                    Upload an image file: <input id="file_input" type="file" accept="image/jpeg" v-on:change="upload_preview">
+                    </div>
+                    <button v-if="preview_image" class="spaced" v-on:click="clear_preview">Use different image</button>
+                    <button v-if="preview_image" class="spaced" v-on:click="upload_file">Save this image</button>
+                </div>
+
+                <div class=" publish_box container">
+                    <p class="padded"> This is a preview of your post. You can choose to attach an image or publish as is.</p>
+
+                </div>
+                <div class="main_page compressible max900 container ">
+                    <div  class="left_side third left " >
+                        <h6><button class="white small fa fa-star-o"></button> ${post_title} - $${image_price} </h6>
+                        <img id="output_image" v-if="preview_image" class="shrink"  alt="your image"/>
+                        <div class="accordion">
+                              <input type="checkbox" id="x04">
+                              <label for="x04"><a class="white">Seller Info</a></label>
+                              <div>
+                                <div  class="padded white">
+                                 <p v-if="show_email">Email: ${current_user}</p>
+                                    <div v-if="post_phone_number">
+                                        <p v-if="post_phone_number">Phone number: ${post_phone_number}</p>
+                                    <p v-if="text_ok">Text ok</p>
+                                    <p v-if="call_ok">Call ok</p>
+                                    </div>
+
+                                </div>
+                              </div>
+                            </div>
+                    </div>
+                    <div class="right_side twothirds right">
+                        <div class="item_desc left">
+                            <h6> Item details</h6>
+                            <p class=" spaced preview ">${post_description} </p>
+
+                        </div>
+                    </div>
+
+            </div>
+            </div>
+        </div>
+      {{pass}}
+        <div v-if="item_page">
+            <div v-for="image in user_images" v-if="image._idx == selected_item_idx" class="top_bar_buttons">
+                    <button v-if="image._idx != 0" v-on:click="show_item(image._idx-1)"class="white left ">◀  prev </button>
+                    <button class="white" v-on:click="go_home"> ▲ back </button>
+                    <button  v-if="image._idx+1 != max_id" v-on:click="show_item(image._idx+1)" class="white right"> next ▶ </button>
+            </div>
+            <div v-for="image in user_images" v-if="image._idx == selected_item_idx"
+                 class="main_page compressible max900 container ">
+                <div  class="left_side third left " >
+                    <h6><button class="white small fa fa-star-o"></button> ${image.title} - $${image.image_price} </h6>
+                    <img v-bind:src="image.image_url" height="350px" width="400px" class="img_pad"/>
+                    <div class="accordion">
+                          <input type="checkbox" id="x04">
+                          <label for="x04"><a class="white">Seller Info</a></label>
+                          <div>
+                            <div  class="padded white">
+                             <p v-if="show_email">Email: ${image.user_email}</p>
+                                <p v-if="post_phone_number != null">Phone number: ${post_phone_number}</p>
+                            </div>
+                          </div>
+                        </div>
+                </div>
+                <div class="right_side twothirds right">
+                    <div class="item_desc left">
+                        <h6> Item details</h6>
+                        <p class=" spaced preview ">${image.description} </p>
+                        <p>Posted: ${image.created_on}</p>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+  </div>
+
 </div>
-
-
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
+
+</div>

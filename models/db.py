@@ -65,6 +65,8 @@ auth = Auth(db, host_names=myconf.get('host.names'))
 service = Service()
 plugins = PluginManager()
 
+#auth.settings.extra_fields['auth_user']= [
+ # Field('phone')]
 # create all tables needed by auth if not custom tables
 auth.define_tables(username=False, signature=False)
 
@@ -96,4 +98,4 @@ logger = logging.getLogger(request.application)
 logger.setLevel(logging.INFO)
 
 # Let's log the request.
-logger.info("====> Request: %r %r %r %r" % (request.env.request_method, request.env.path_info, request.args, request.vars))
+logger.info("====> Request: %r %r" % (request.env.request_method, request.env.path_info))
