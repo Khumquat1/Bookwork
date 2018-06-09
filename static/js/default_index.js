@@ -28,7 +28,23 @@ var app = function() {
                 function (data) {
                 self.vue.user_images = data.user_images;
                 enumerate(self.vue.user_images);
+                self.vue.users = data.users;
+                enumerate(self.vue.users);
                 self.vue.max_id = self.vue.user_images.length;
+            })
+        }, 1000);
+    };
+
+    self.get_sorted_images = function (flag) {
+        setTimeout(function() {
+            $.post(sorted_images_url,
+            {
+                flag: flag
+            },
+                function (data) {
+                console.log("send out flag: ", flag)
+                self.vue.user_images = data.user_images;
+                enumerate(self.vue.user_images);
             })
         }, 1000);
     };
@@ -38,7 +54,6 @@ var app = function() {
             {},
             function (data) {
             self.vue.current_user = data.current_user;
-            self.vue.users = data.users;
         })
     };
 
@@ -72,6 +87,7 @@ var app = function() {
                     // TODO: if you like, add a listener for "error" to detect failure.
                     req.open("PUT", put_url, true);
                     req.send(file);
+                    self.vue.image_url = get_url;
                 });
         }
     };
@@ -82,43 +98,60 @@ var app = function() {
 
         console.log('The file was uploaded; it is now available at ' + get_url);
             self.vue.preview_image = true;
-        self.vue.get_images();
-        self.vue.image_url = get_url;
-        }, 1000);
+             self.vue.get_images();
 
+        }, 1000);
+        console.log("details: ");
         console.log(self.vue.post_title + self.vue.post_description);
     };
 
     self.add_post = function (){
         self.upload_file();
-        if(self.vue.image_url !== null){
+        setTimeout(function(){
+            if(self.vue.image_url !== null){
             $.post(add_image_url,
             {
                 image_price: self.vue.image_price,
                 description: self.vue.post_description,
                 title: self.vue.post_title,
-                image_url: self.vue.image_url
+                image_url: self.vue.image_url,
+                phone_number: self.vue.post_phone_number,
+                text_ok: self.vue.text_ok,
+                call_ok: self.vue.call_ok,
+                show_email: self.vue.show_email
             },
             function (data) {
                 self.vue.user_images.push(data.user_images);
                 self.vue.preview_image_id = (data.user_images.id);
                 enumerate(self.vue.user_images);
+                console.log
             });
-        }
-        if(self.vue.image_url == null){
-            console.log("no img posted");
-            $.post(add_image_url_np,
-            {
-                image_price: self.vue.image_price,
-                description: self.vue.post_description,
-                title: self.vue.post_title,
-            },
-            function (data) {
-                self.vue.user_images.push(data.user_images);
-                enumerate(self.vue.user_images);
-            });
-        }
-        self.vue.go_home();
+            }
+            if(self.vue.image_url == null){
+                console.log("no img posted");
+                $.post(add_image_url_np,
+                {
+                    image_price: self.vue.image_price,
+                    description: self.vue.post_description,
+                    title: self.vue.post_title,
+                    phone_number: self.vue.post_phone_number,
+                    text_ok: self.vue.text_ok,
+                    call_ok: self.vue.call_ok,
+                    show_email: self.vue.show_email
+                },
+                function (data) {
+                    self.vue.user_images.push(data.user_images);
+                    enumerate(self.vue.user_images);
+                });
+            }
+                console.log("uploaded post with ", self.vue.image_price,
+                            " ", self.vue.post_description, " "
+                            , self.vue.post_title, " ",
+                            self.vue.post_phone_number)
+                  self.vue.go_home();
+            }, 1000);
+
+
     };
 
 
@@ -147,6 +180,7 @@ var app = function() {
         self.vue.call_ok=false;
         self.vue.show_email= true;
         self.vue.get_images();
+        self.vue.image_url=null;
         self.vue.image_price = null;
         self.vue.post_description = null;
         self.vue.post_title = null;
@@ -155,7 +189,6 @@ var app = function() {
         self.vue.post_page_2 =false;
         self.vue.is_uploading=false;
         self.vue.preview_image = false;
-        self.vue.image_url=null;
         self.vue.home_page=true;
         self.vue.selected_item_idx = null;
     };
@@ -268,16 +301,41 @@ var app = function() {
 
 
     self.toggle = function(num){
-        if(num=1){
+        if(num==1){
             self.vue.text_ok = !self.vue.text_ok;
         }
-        if(num=2){
+        if(num==2){
             self.vue.call_ok = !self.vue.call_ok;
         }
-        if(num=3){
+        if(num==3){
             self.vue.show_email = !self.vue.show_email;
         }
     };
+
+    self.search_fields = function(string){
+        var str = string;
+        var title = ""
+        var desc = ""
+        console.log("starting search of ", self.vue.user_images.length, "size")
+        for (var i = 0; i < self.vue.user_images.length; i++) {
+            title = self.vue.user_images[i].title;
+            desc = self.vue.user_images[i].description;
+            if(title.includes(str) || desc.includes(str)){
+                console.log("found a match")
+                console.log("saving post title: ", title, "desc: ", desc)
+            }
+            else{
+                console.log("was not match")
+                console.log("removing post title: ", title, "desc: ", desc)
+                console.log("removing ", self.vue.user_images[i])
+                self.vue.user_images.splice(i,1);
+                i--;
+
+            }
+
+        }
+    }
+
 
     self.vue = new Vue({
         el: "#vue-div",
@@ -313,6 +371,10 @@ var app = function() {
             call_ok:false,
             show_email: true,
             preview_image_id: null,
+            by_recent: 1,
+            by_price_up:2,
+            by_price_down:3,
+            search_input: null,
 
         },
         methods: {
@@ -326,7 +388,7 @@ var app = function() {
             get_images: self.get_images,
             get_follows: self.get_follows,
 
-
+            search_fields: self.search_fields,
             show_item: self.show_item,
             upload_file: self.upload_file,
             upload_complete: self.upload_complete,
@@ -342,6 +404,7 @@ var app = function() {
             clear_preview: self.clear_preview,
             upload_preview: self.upload_preview,
             toggle: self.toggle,
+            get_sorted_images: self.get_sorted_images
 
         }
 

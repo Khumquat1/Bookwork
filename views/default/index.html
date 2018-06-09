@@ -9,6 +9,7 @@
   var image_url = "{{=URL('api', 'get_user_images', user_signature=False)}}";
   var log_user_url = "{{=URL('api', 'log_user', user_signature=False)}}";
   var all_image_url = "{{=URL('api', 'get_images', user_signature=False)}}";
+  var sorted_images_url = "{{=URL('api', 'get_sorted_images', user_signature=False)}}";
   var all_follows_url = "{{=URL('api', 'get_follows', user_signature=False)}}";
   var set_price_url = "{{=URL('api', 'set_price', user_signature=True)}}";
   var follow_post_url = "{{=URL('api', 'follow', user_signature=True)}}";
@@ -27,8 +28,26 @@
   <div id="vue-div" class="display:none">
     <!-- Your code goes here.  Remember to call $("#vue-div").show() once you get the data for the first time. -->
         <div v-if="home_page">
-            <div class="container padded">
-                <button  v-on:click="go_post_page()" class="right white"> <i class="fa fa-plus ">Post</i></button>
+            <div class=" container padded">
+                <button  v-on:click="go_post_page()" class=" right white"> <i class="fa fa-plus ">Post</i></button>
+                 <div class="container center half">
+                  <div class="half">
+                    <input type="text" v-model="search_input" class="fill" placeholder="search">
+
+                    </div>
+                    <button class="" v-on:click='search_fields(search_input)'>submit</button>
+                 </div>
+                <div class="container half padded-L">
+                    <div class="dropdown ">
+                    <button class="dropbtn">Sort ▼</button>
+                    <div class="dropdown-content ">
+                        <a v-on:click="get_sorted_images(by_recent)">most recent</a>
+                        <a v-on:click="get_sorted_images(by_price_up)">price ↑</a>
+                        <a v-on:click="get_sorted_images(by_price_down)">price ↓</a>
+                    </div>
+                </div>
+                </div>
+
                 <!-- Left part of the page -->
                   <!-- Code to upload files, with control buttons -->
                 <div class="image_container">
@@ -65,7 +84,7 @@
 
                           <div class="title half left">
                           <p>Post Title</p>
-                          <input class="form-control string "  v-model="post_title"
+                          <input class="form-control string"  v-model="post_title"
                                 placeholder="Enter book name here" type="text" >
                           </div>
                           <div class="price quarter">
@@ -134,8 +153,8 @@
                                  <p v-if="show_email">Email: ${current_user}</p>
                                     <div v-if="post_phone_number">
                                         <p v-if="post_phone_number">Phone number: ${post_phone_number}</p>
-                                    <p v-if="text_ok">Text ok</p>
-                                    <p v-if="call_ok">Call ok</p>
+                                        <p v-if="text_ok">Text ok</p>
+                                        <p v-if="call_ok">Call ok</p>
                                     </div>
 
                                 </div>
@@ -170,8 +189,13 @@
                           <label for="x04"><a class="white">Seller Info</a></label>
                           <div>
                             <div  class="padded white">
-                             <p v-if="show_email">Email: ${image.user_email}</p>
-                                <p v-if="post_phone_number != null">Phone number: ${post_phone_number}</p>
+                             <p v-if='image.show_email'>Email: ${image.user_email}</p>
+                                <div v-if='image.phone_number'>
+                                        <p>Phone number: ${image.phone_number}</p>
+                                        <p v-if='image.text_ok'>Text ok</p>
+                                        <p v-if='image.call_ok'>Call ok</p>
+                                    </div>
+
                             </div>
                           </div>
                         </div>

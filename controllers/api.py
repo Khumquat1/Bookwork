@@ -13,9 +13,12 @@ def get_user_name_from_email(email):
     else:
         return [u.first_name, u.last_name]
 
+
+
 def get_images():
     images = []
     users=[]
+    seen=set(users)
     rows = db().select(db.user_images.ALL)
     rows_2 = db().select(db.users.ALL)
     for i, r in enumerate(rows):
@@ -27,36 +30,71 @@ def get_images():
             image_price=r.image_price,
             title=r.title,
             description=r.description,
-            user_phone=r.user_phone,
+            phone_number=r.phone_number,
+            text_ok = r.text_ok,
+            call_ok = r.call_ok,
+            show_email = r.show_email
             )
         images.append(t)
     for i, r in enumerate(rows_2):
+        if r.user_email not in seen:
+            t = dict(
+                id=r.id,
+                user_email=r.user_email,
+                )
+            seen.add(r.user_email)
+            users.append(t)
+    print(users)
+    return response.json(dict(user_images=images, users=users))
+
+def get_sorted_images():
+    sortby = db.user_images.title
+    print('recieved flag '+request.vars.flag)
+    images = []
+    if request.vars.flag is '1':
+        print("sort by recent")
+        sortby = db.user_images.created_on
+    if request.vars.flag is '2':
+        print("sort by cost up")
+        sortby = ~db.user_images.image_price
+    if request.vars.flag is '3':
+        print("sort by cost down")
+        sortby = db.user_images.image_price
+    rows = db().select(db.user_images.ALL, orderby=sortby)
+    for i, r in enumerate(rows):
         t = dict(
             id=r.id,
+            image_url=r.image_url,
             user_email=r.user_email,
-            follows=r.follows,
+            created_on=r.created_on,
+            image_price=r.image_price,
+            title=r.title,
+            description=r.description,
+            phone_number=r.phone_number,
+            text_ok = r.text_ok,
+            call_ok = r.call_ok,
+            show_email = r.show_email
             )
-        users.append(t)
+        images.append(t)
     return response.json(dict(user_images=images))
 
 
 def log_user():
     if auth.user is not None:
         grabbed_user = auth.user.email
-        new_user = True
-        users = []
+        found = False;
         rows = db().select(db.users.ALL)
-        print("current users: ", rows)
-        for row in db(db.users.user_email == grabbed_user).select():
-            new_user = False
-            print("repeat user logged ", grabbed_user)
-        if new_user:
-            print("new user found")
-            image_id = db.users.insert(user_email=grabbed_user)
-            im = db.users(image_id)
-            users = dict(user_email=grabbed_user)
-        print(users)
-        return response.json(dict(current_user=grabbed_user, users=users))
+        for i,r in enumerate(rows):
+            if grabbed_user == r.user_email:
+                found= True
+                break
+        if not found:
+            print("logged a new user")
+            u_id = db.users.insert(user_email = grabbed_user)
+            us = db.users(u_id)
+            users = dict(user_email = grabbed_user)
+            return response.json(dict(current_user=grabbed_user, users=users))
+        return response.json(dict(current_user=grabbed_user))
 
 def get_follows():
     follows = []
@@ -72,19 +110,32 @@ def get_follows():
 
 
 @auth.requires_signature()
+def follow():
+    current_user = auth.user.email
+    rows = db().select(db.users.ALL)
+    print rows
+    return "ok"
+
+
+
+@auth.requires_signature()
 def add_image():
     image_id = db.user_images.insert(
         image_url = request.vars.image_url,
+        show_email=request.vars.show_email,
         image_price=request.vars.image_price,
         description=request.vars.description,
         title=request.vars.title,
+        phone_number = request.vars.phone_number,
+        text_ok=request.vars.text_ok,
+        call_ok=request.vars.call_ok
 
     )
     im = db.user_images(image_id)
     name = get_user_name_from_email(im.user_email)
     user_images = dict(
         user_email=im.user_email,
-        user_phone=im.user_phone,
+        show_email=request.vars.show_email,
         id=im.id,
         image_url=request.vars.image_url,
         image_price=request.vars.image_price,
@@ -92,6 +143,9 @@ def add_image():
         last_name=name[1],
         description=request.vars.description,
         title=request.vars.title,
+        phone_number=request.vars.phone_number,
+        text_ok = request.vars.text_ok,
+        call_ok = request.vars.call_ok
 
     )
     print(user_images)
@@ -100,21 +154,28 @@ def add_image():
 def add_image_np():
     image_id = db.user_images.insert(
         image_price=request.vars.image_price,
+        show_email=request.vars.show_email,
         description=request.vars.description,
         title=request.vars.title,
+        phone_number = request.vars.phone_number,
+        text_ok=request.vars.text_ok,
+        call_ok=request.vars.call_ok
 
     )
     im = db.user_images(image_id)
     name = get_user_name_from_email(im.user_email)
     user_images = dict(
         user_email=im.user_email,
-        user_phone=im.user_phone,
+        show_email=request.vars.show_email,
+        phone_number=request.vars.phone_number,
         id=im.id,
         image_url=request.vars.image_url,
         first_name=name[0],
         last_name=name[1],
         description=request.vars.description,
         title=request.vars.title,
+        text_ok=request.vars.text_ok,
+        call_ok=request.vars.call_ok
 
     )
     print(user_images)

@@ -60,6 +60,7 @@ header, main, footer {display:block; with:100%} /* IE fix */
 .right {right:0; text-align:right}
 .middle div {vertical-align:middle}
 .bottom div {vertical-align:bottom}
+.padded-L{padding-left: 71px !important}
 .xscroll {overflow-x:scroll !important}
 .yscroll {overflow-y:scroll !important}
 .nowrap {white-space:nowrap; overflow-x:hidden}
@@ -78,6 +79,13 @@ header, main, footer {display:block; with:100%} /* IE fix */
     overflow: hidden;
     text-overflow: ellipsis;
     border: 1px solid #000000; !important
+}
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
 }
 /*** forms ***/
 input:not([type]), input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]), [type=file]:before {outline:none; padding:0.5em 1em; margin:0.5px; border-bottom:1px solid #ddd; width:100%}
