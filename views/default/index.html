@@ -62,14 +62,18 @@
                   <ul class="container">
                      <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
                       <li v-for="image in user_images"  class="card lifted quarter spacedLR spaced" id="post_images">
-                          <a>
+                          <a v-if="image.image_url">
                               <img @click="show_item(image._idx)" v-bind:src="image.image_url" height="230" width="260" class=" right spacedhalf "/>
+                          </a>
+                          <a v-if="!image.image_url">
+                              <img @click="show_item(image._idx)" src="{{=URL(r=request,c='static',f='images/no_pic.jpg')}}" height="230" width="260" class=" right spacedhalf "/>
                           </a>
 
                           <p class=" center quarter">
 
                               <button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>
-                              <button class="left white small fa fa-star-o" v-on:click="follow_post(image.id)"></button>
+                              <button class="left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                          <button class="left white small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                               <div @click="show_item(image._idx)" class="post_title center">
                                 <a class="strong">${image.title}</a></div>
                               <a class="white right">$${image.image_price}</a>

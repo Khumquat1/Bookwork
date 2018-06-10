@@ -40,6 +40,7 @@ def get_images():
             t = dict(
                 id=r.id,
                 user_email=r.user_email,
+                follows=r.follows
                 )
             seen.add(r.user_email)
             users.append(t)
@@ -81,7 +82,7 @@ def get_sorted_images():
 def log_user():
     if auth.user is not None:
         grabbed_user = auth.user.email
-        found = False;
+        found = False
         rows = db().select(db.users.ALL)
         for i,r in enumerate(rows):
             if grabbed_user == r.user_email:
@@ -91,7 +92,7 @@ def log_user():
             print("logged a new user")
             u_id = db.users.insert(user_email = grabbed_user)
             us = db.users(u_id)
-            users = dict(user_email = grabbed_user)
+            users = dict(user_email = grabbed_user, follows = ())
             return response.json(dict(current_user=grabbed_user, users=users))
         return response.json(dict(current_user=grabbed_user))
 
@@ -106,14 +107,6 @@ def get_follows():
         follows.append(t)
     print follows
     return response.json(dict(follows=follows))
-
-
-@auth.requires_signature()
-def follow():
-    current_user = auth.user.email
-    rows = db().select(db.users.ALL)
-    print rows
-    return "ok"
 
 
 
@@ -150,36 +143,6 @@ def add_image():
     print(user_images)
     return response.json(dict(user_images=user_images))
 
-def add_image_np():
-    image_id = db.user_images.insert(
-        image_price=request.vars.image_price,
-        show_email=request.vars.show_email,
-        description=request.vars.description,
-        title=request.vars.title,
-        phone_number = request.vars.phone_number,
-        text_ok=request.vars.text_ok,
-        call_ok=request.vars.call_ok
-
-    )
-    im = db.user_images(image_id)
-    name = get_user_name_from_email(im.user_email)
-    user_images = dict(
-        user_email=im.user_email,
-        show_email=request.vars.show_email,
-        phone_number=request.vars.phone_number,
-        id=im.id,
-        image_url=request.vars.image_url,
-        first_name=name[0],
-        last_name=name[1],
-        description=request.vars.description,
-        title=request.vars.title,
-        text_ok=request.vars.text_ok,
-        call_ok=request.vars.call_ok
-
-    )
-    print(user_images)
-    return response.json(dict(user_images=user_images))
-
 @auth.requires_signature()
 def set_price():
     db(db.user_images.id == request.vars.user_image_id).update(
@@ -187,6 +150,35 @@ def set_price():
     )
     print("new price of image id " + request.vars.user_image_id + " is "+ request.vars.new_price)
     print(db.user_images[request.vars.user_image_id])
+    return "ok"
+
+
+@auth.requires_signature()
+def follow():
+    current_user = request.vars.user
+    temp_follows = []
+    flag = request.vars.flag
+    rows = db().select(db.users.ALL)
+    for i, r in enumerate(rows):
+        if r.user_email == current_user:
+            if r.follows:
+                temp_follows.extend(r.follows)
+            if flag is '0':
+                if temp_follows.count(request.vars.image_id) != 0:
+                    print("already followed")
+                    break
+                temp_follows.append(request.vars.image_id)
+            if flag is '1':
+                print("removing id: "+request.vars.image_id)
+                if temp_follows.count(request.vars.image_id) == 0:
+                    print("no instance found")
+                    break
+                temp_follows.remove(request.vars.image_id)
+    print ("list of follows ", temp_follows)
+    db(db.users.user_email == current_user).update(
+        follows = temp_follows
+    )
+
     return "ok"
 
 @auth.requires_signature()

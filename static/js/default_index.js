@@ -107,7 +107,6 @@ var app = function() {
         self.upload_file();
         self.vue.preview_image = false;
         setTimeout(function(){
-            if(self.vue.image_url !== null){
             $.post(add_image_url,
             {
                 image_price: self.vue.image_price,
@@ -124,24 +123,7 @@ var app = function() {
                 self.vue.preview_image_id = (data.user_images.id);
                 enumerate(self.vue.user_images);
             });
-            }
-            if(self.vue.image_url == null){
-                console.log("no img posted");
-                $.post(add_image_url_np,
-                {
-                    image_price: self.vue.image_price,
-                    description: self.vue.post_description,
-                    title: self.vue.post_title,
-                    phone_number: self.vue.post_phone_number,
-                    text_ok: self.vue.text_ok,
-                    call_ok: self.vue.call_ok,
-                    show_email: self.vue.show_email
-                },
-                function (data) {
-                    self.vue.user_images.push(data.user_images);
-                    enumerate(self.vue.user_images);
-                });
-            }
+
                 console.log("uploaded post with ", self.vue.image_price,
                             " ", self.vue.post_description, " "
                             , self.vue.post_title, " ",
@@ -213,15 +195,16 @@ var app = function() {
 
     };
 
-    self.follow_post = function(image_id){
+    self.follow_post = function(image_id, flag){
         $.post(follow_post_url,
             {
-                image_id: image_id
+                image_id: image_id,
+                user: self.vue.current_user,
+                flag: flag
             },
             function () {
             });
         self.vue.get_images();
-        console.log("current user: "+self.vue.current_user)
     };
 
     self.delete_post = function(post_id) {
@@ -355,7 +338,6 @@ var app = function() {
             self.vue.view_list = true;
         }
     };
-
 
     self.vue = new Vue({
         el: "#vue-div",
