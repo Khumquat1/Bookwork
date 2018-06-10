@@ -29,13 +29,14 @@
     <!-- Your code goes here.  Remember to call $("#vue-div").show() once you get the data for the first time. -->
         <div v-if="home_page">
             <div class=" container padded">
-                <button  v-on:click="go_post_page()" class=" right white"> <i class="fa fa-plus ">Post</i></button>
+
                  <div class="container center half">
+                     <button  v-on:click="go_post_page()" class=" right white"> <i class="fa fa-plus ">Post</i></button>
                   <div class="half">
                     <input type="text" v-model="search_input" class="fill" placeholder="search">
 
                     </div>
-                    <button class="" v-on:click='search_fields(search_input)'>submit</button>
+                    <button class="gray fa fa-search" v-on:click='search_fields(search_input)'></button>
                  </div>
                 <div class="container half padded-L">
                     <div class="dropdown ">
@@ -45,12 +46,18 @@
                         <a v-on:click="get_sorted_images(by_price_up)">price ↑</a>
                         <a v-on:click="get_sorted_images(by_price_down)">price ↓</a>
                     </div>
+                     </div>
+                    <div class="dropdown ">
+                    <button class="dropbtn">View ▼</button>
+                    <div class="dropdown-content ">
+                        <a class="fa fa-photo" v-on:click="view(1)">    thumbnail</a>
+                        <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
+                    </div>
+                     </div>
                 </div>
-                </div>
-
                 <!-- Left part of the page -->
                   <!-- Code to upload files, with control buttons -->
-                <div class="image_container">
+                <div v-if="view_thumbnail" class="image_container">
 
                   <ul class="container">
                      <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
@@ -70,6 +77,11 @@
 
                       </li>
                   </ul>
+
+                </div>
+                <div v-if="view_list" class="image_container">
+
+                  
 
                 </div>
 
@@ -134,7 +146,6 @@
                     Upload an image file: <input id="file_input" type="file" accept="image/jpeg" v-on:change="upload_preview">
                     </div>
                     <button v-if="preview_image" class="spaced" v-on:click="clear_preview">Use different image</button>
-                    <button v-if="preview_image" class="spaced" v-on:click="upload_file">Save this image</button>
                 </div>
 
                 <div class=" publish_box container">

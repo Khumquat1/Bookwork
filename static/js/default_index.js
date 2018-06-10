@@ -97,9 +97,7 @@ var app = function() {
                    // Hides the uploader div.
 
         console.log('The file was uploaded; it is now available at ' + get_url);
-            self.vue.preview_image = true;
              self.vue.get_images();
-
         }, 1000);
         console.log("details: ");
         console.log(self.vue.post_title + self.vue.post_description);
@@ -107,6 +105,7 @@ var app = function() {
 
     self.add_post = function (){
         self.upload_file();
+        self.vue.preview_image = false;
         setTimeout(function(){
             if(self.vue.image_url !== null){
             $.post(add_image_url,
@@ -124,7 +123,6 @@ var app = function() {
                 self.vue.user_images.push(data.user_images);
                 self.vue.preview_image_id = (data.user_images.id);
                 enumerate(self.vue.user_images);
-                console.log
             });
             }
             if(self.vue.image_url == null){
@@ -147,10 +145,9 @@ var app = function() {
                 console.log("uploaded post with ", self.vue.image_price,
                             " ", self.vue.post_description, " "
                             , self.vue.post_title, " ",
-                            self.vue.post_phone_number)
-                  self.vue.go_home();
+                            self.vue.post_phone_number);
+                self.vue.go_home();
             }, 1000);
-
 
     };
 
@@ -178,6 +175,7 @@ var app = function() {
     self.go_home = function(){
         self.vue.text_ok =false;
         self.vue.call_ok=false;
+        self.vue.post_phone_number=null;
         self.vue.show_email= true;
         self.vue.get_images();
         self.vue.image_url=null;
@@ -188,13 +186,14 @@ var app = function() {
         self.vue.post_page=false;
         self.vue.post_page_2 =false;
         self.vue.is_uploading=false;
-        self.vue.preview_image = false;
+        self.vue.preview_image=false;
         self.vue.home_page=true;
         self.vue.selected_item_idx = null;
     };
 
     self.go_post_page = function(){
         self.vue.home_page=false;
+        self.vue.preview_image = false;
         self.vue.post_page_2=false;
         self.vue.post_page=true;
 
@@ -204,6 +203,7 @@ var app = function() {
         if(self.vue.post_title != null && self.vue.post_description != null && self.vue.image_price != null){
             self.vue.post_page=false;
             self.vue.post_page_2=true;
+            self.vue.preview_image = false;
 
         }
         else{
@@ -332,9 +332,29 @@ var app = function() {
                 i--;
 
             }
-
         }
-    }
+        setTimeout(function(){
+            if(self.vue.user_images.length == 0){
+                alert("You search returned with 0 results! Refine your search or post")
+                self.vue.go_home()
+            }
+        }, 500)
+
+    };
+
+    self.view = function(flag){
+        var flag = flag
+        if(flag == 1){
+            self.vue.view_thumbnail = false;
+            self.vue.view_list = false;
+            self.vue.view_thumbnail = true;
+        }
+        if(flag == 2){
+            self.vue.view_list = false;
+            self.vue.view_thumbnail = false;
+            self.vue.view_list = true;
+        }
+    };
 
 
     self.vue = new Vue({
@@ -375,6 +395,8 @@ var app = function() {
             by_price_up:2,
             by_price_down:3,
             search_input: null,
+            view_thumbnail: true,
+            view_list: false,
 
         },
         methods: {
@@ -404,7 +426,8 @@ var app = function() {
             clear_preview: self.clear_preview,
             upload_preview: self.upload_preview,
             toggle: self.toggle,
-            get_sorted_images: self.get_sorted_images
+            get_sorted_images: self.get_sorted_images,
+            view: self.view,
 
         }
 

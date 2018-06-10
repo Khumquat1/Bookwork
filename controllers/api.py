@@ -14,12 +14,11 @@ def get_user_name_from_email(email):
         return [u.first_name, u.last_name]
 
 
-
 def get_images():
     images = []
     users=[]
     seen=set(users)
-    rows = db().select(db.user_images.ALL)
+    rows = db().select(db.user_images.ALL, orderby = ~db.user_images.created_on)
     rows_2 = db().select(db.users.ALL)
     for i, r in enumerate(rows):
         t = dict(
@@ -48,12 +47,12 @@ def get_images():
     return response.json(dict(user_images=images, users=users))
 
 def get_sorted_images():
-    sortby = db.user_images.title
+    sortby = ~db.user_images.created_on
     print('recieved flag '+request.vars.flag)
     images = []
     if request.vars.flag is '1':
         print("sort by recent")
-        sortby = db.user_images.created_on
+        sortby = ~db.user_images.created_on
     if request.vars.flag is '2':
         print("sort by cost up")
         sortby = ~db.user_images.image_price
