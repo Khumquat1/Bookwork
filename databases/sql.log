@@ -9499,3 +9499,23 @@ success!
 success!
 success!
 success!
+timestamp: 2018-06-10T17:02:43.078000
+CREATE TABLE "web2py_session_Bookwork"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "locked" CHAR(1),
+    "client_ip" CHAR(64),
+    "created_datetime" TIMESTAMP,
+    "modified_datetime" TIMESTAMP,
+    "unique_key" CHAR(64),
+    "session_data" BLOB
+);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
