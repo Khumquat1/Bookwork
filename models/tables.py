@@ -21,12 +21,13 @@ db.define_table('user_images',
                 Field('image_url', 'list:string'),
                 Field('created_by', 'reference auth_user', default=auth.user_id),
                 Field('created_on', 'datetime', default=datetime.datetime.utcnow()),
+                Field('following_users', 'list:string')
                 )
 
 
 db.define_table('users',
                 Field('user_email'),
-                Field('follows', 'list:string')
+                Field('follow_ids', 'list:integer')
 )
 
 
