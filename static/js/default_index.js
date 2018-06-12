@@ -68,8 +68,8 @@ var app = function() {
             },
                 function (data) {
                 console.log(data.user_images);
-                self.vue.follows = data.user_images;
-                enumerate(self.vue.follows);
+                self.vue.user_images = data.user_images;
+                enumerate(self.vue.user_images);
                 self.vue.max_id = self.vue.user_images.length;
             })
         }, 1000);
@@ -87,10 +87,11 @@ var app = function() {
                 console.log("send out flag: ", flag)
                 self.vue.user_images = data.user_images;
                 enumerate(self.vue.user_images);
+                self.vue.format_date();
                 self.vue.max_id = self.vue.user_images.length;
             })
         }, 1000);
-        self.vue.format_date();
+
     };
 
     self.log_user = function () {
@@ -224,17 +225,6 @@ var app = function() {
     }
 
 
-    self.set_price = function(image_id, image_price){
-        console.log("changing price of image id: " + image_id +" to "+ image_price);
-        $.post(set_price_url,
-            {
-                user_image_id: image_id,
-                new_price: image_price
-            },
-            function () {
-      })
-    };
-
     self.show_item = function(image_idx){
         self.vue.selected_item_idx = null;
         self.vue.home_page=false;
@@ -345,34 +335,28 @@ var app = function() {
 
     };
 
-    self.test_follow_post = function(image_id, flag){
+    self.follow_post = function(image_id, flag){
         if(!self.vue.logged_in)
             alert('You must be logged in to track posts!')
-        $.post(test_follow_post_url,
-            {
-                user: self.vue.current_user,
-                image_id: image_id,
-                flag: flag
-            },
-            function () {
-            self.vue.get_images();
-            });
-
-    };
-
-
-    self.follow_post = function(image_id, flag){
         $.post(follow_post_url,
             {
-                image_id: image_id,
                 user: self.vue.current_user,
+                image_id: image_id,
                 flag: flag
             },
             function () {
+             if (self.vue.follow_page)
+                 self.get_local_follows();
+            if (self.vue.edit_page)
+                self.view_owned();
+            if (self.vue.home_page)
+                self.get_images();
             });
-        self.vue.get_images();
-        self.vue.get_local_follows();
+
+
     };
+
+
 
     self.delete_post = function(post_id) {
         $.post(del_post_url,
@@ -433,17 +417,6 @@ var app = function() {
         self.go_home();
     };
 
-
-    self.get_follows = function () {
-        setTimeout(function() {
-            $.getJSON(all_follows_url,
-                {},
-                function (data) {
-                self.vue.follows = data.follows;
-                enumerate(self.vue.follows);
-            })
-        }, 000);
-    };
 
 
     self.clear_preview = function(){
@@ -612,10 +585,8 @@ var app = function() {
         data: {
             user_images: [],
             users: [],
-            follows: [],
             user_email: null,
             image_price: null,
-            new_price: null,
             image_url: null,
             image_preview: null,
             post_title:null,
@@ -635,16 +606,12 @@ var app = function() {
             max_id: 0,
             post_id: null,
             current_user: null,
-            display_number: false,
             output_src: null,
             post_phone_number: null,
             text_ok:false,
             call_ok:false,
             show_email: true,
             preview_image_id: null,
-            by_recent: 1,
-            by_price_up:2,
-            by_price_down:3,
             search_input: null,
             view_thumbnail: true,
             view_list: false,
@@ -656,16 +623,11 @@ var app = function() {
             preferred_date:null
         },
         methods: {
-            local_image: self.local_image,
             extend: self.extend,
             add_post: self.add_post,
-            log_users: self.log_users,
             follow_post: self.follow_post,
             test_follow_post: self.test_follow_post,
-            set_price: self.set_price,
-            get_user_images: self.get_user_images,
             get_images: self.get_images,
-            get_follows: self.get_follows,
             get_local_follows: self.get_local_follows,
             edit_item: self.edit_item,
             search_fields: self.search_fields,
@@ -680,25 +642,19 @@ var app = function() {
             go_post_page_2: self.go_post_page_2,
             delete_post: self.delete_post,
             delete_post_idx: self.delete_post_idx,
-            unfollow: self.unfollow,
-            clear_follows: self.clear_follows,
             cancel_post: self.cancel_post,
-            get_user: self.get_user,
             clear_preview: self.clear_preview,
             upload_preview: self.upload_preview,
             toggle: self.toggle,
             get_sorted_images: self.get_sorted_images,
             view: self.view,
             view_follows: self.view_follows,
-            previewImages: self.previewImages,
             view_owned: self.view_owned,
             go_back: self.go_back,
             new_image: self.new_image,
             cancel_new_image: self.cancel_new_image,
             update_post: self.update_post,
             format_date: self.format_date
-
-
         }
 
     });

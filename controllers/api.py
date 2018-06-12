@@ -3,17 +3,6 @@ import traceback
 
 # Cloud-safe of uuid, so that many cloned servers do not all use the same uuids.
 from gluon.utils import web2py_uuid
-def get_user_name_from_email(email):
-    """Returns a string corresponding to the user first and last names,
-    given the user email."""
-    u = db(db.auth_user.email == email).select().first()
-
-    if u is None:
-        return 'None'
-    else:
-        return [u.first_name, u.last_name]
-
-
 def get_images():
     images = []
     users=[]
@@ -164,18 +153,14 @@ def add_image():
         phone_number = request.vars.phone_number,
         text_ok=request.vars.text_ok,
         call_ok=request.vars.call_ok
-
     )
     im = db.user_images(image_id)
-    name = get_user_name_from_email(im.user_email)
     user_images = dict(
         user_email=im.user_email,
         show_email=request.vars.show_email,
         id=im.id,
         image_url=request.vars.image_url,
         image_price=request.vars.image_price,
-        first_name=name[0],
-        last_name=name[1],
         description=request.vars.description,
         title=request.vars.title,
         phone_number=request.vars.phone_number,
@@ -185,15 +170,6 @@ def add_image():
     )
     print(user_images)
     return response.json(dict(user_images=user_images))
-
-@auth.requires_signature()
-def set_price():
-    db(db.user_images.id == request.vars.user_image_id).update(
-        image_price = request.vars.new_price
-    )
-    print("new price of image id " + request.vars.user_image_id + " is "+ request.vars.new_price)
-    print(db.user_images[request.vars.user_image_id])
-    return "ok"
 
 @auth.requires_signature()
 def update_post():
@@ -224,7 +200,7 @@ def update_post():
     return "ok"
 
 @auth.requires_signature()
-def test_follow():
+def follow():
     current_user = request.vars.user
     temp_follows = []
     temp = db(db.user_images.id == request.vars.image_id).select().first()
@@ -258,47 +234,9 @@ def test_follow():
     return "ok"
 
 @auth.requires_signature()
-def follow():
-    current_user = request.vars.user
-    temp_follows = []
-    temp = db(db.user_images.id == request.vars.image_id).select().first()
-    print(temp)
-    temp_id=temp.id
-    flag = request.vars.flag
-    rows = db().select(db.users.ALL)
-    for i, r in enumerate(rows):
-        if r.user_email == current_user:
-            if r.follow_ids:
-                temp_follows.extend(r.follow_ids)
-                print("following ", temp_follows)
-            if flag is '0':
-                if temp_follows.count(temp_id) != 0:
-                    print("already followed")
-                    break
-                temp_follows.append(temp_id)
-            if flag is '1':
-                print("removing id: ",temp_id)
-                if temp_follows.count(temp_id) == 0:
-                    print("no instance found")
-                    break
-                temp_follows.remove(temp_id)
-    print ("list of follows ", temp_follows)
-    db(db.users.user_email == current_user).update(
-        follow_ids = temp_follows
-    )
-
-    return "ok"
-
-@auth.requires_signature()
 def del_post():
     db(db.user_images.id == request.vars.post_id).delete()
     print("picture gone")
-    return "ok"
-
-@auth.requires_signature()
-def unfollow():
-    db(db.follows.id == request.vars.post_id).delete()
-    print("unfollowed so its gone")
     return "ok"
 
 

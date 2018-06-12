@@ -29,8 +29,7 @@ response.google_analytics_id = None
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-    (T('Home'), request.controller == 'default' and request.function == 'index', URL('default', 'index')),
-    (T('Manage'), request.controller == 'default' and request.function == 'stuff', URL('default', 'manage')),
+    (T('Home'), request.controller == 'default' and request.function == 'index', URL('default', 'index'))
 ]
 
 DEVELOPMENT_MENU = True

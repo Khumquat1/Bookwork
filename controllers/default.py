@@ -22,19 +22,6 @@ def stuff():
 
 # Normally here we would check that the user is an admin, and do programmatic
 # APIs to add and remove products to the inventory, etc.
-@auth.requires_login()
-def manage():
-    q = db.user_images # This queries for all products.
-    form = SQLFORM.grid(
-        q,
-        editable=True,
-        create=True,
-        user_signature=True,
-        deletable=True,
-        fields=[db.user_images.title, db.user_images.description, db.user_images.image_price],
-        details=True,
-    )
-    return dict(form=form)
 
 
 def user():

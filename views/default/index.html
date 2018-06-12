@@ -13,10 +13,7 @@
   var sorted_images_url = "{{=URL('api', 'get_sorted_images', user_signature=False)}}";
   var set_price_url = "{{=URL('api', 'set_price', user_signature=True)}}";
   var follow_post_url = "{{=URL('api', 'follow', user_signature=True)}}";
-  var test_follow_post_url = "{{=URL('api', 'test_follow', user_signature=True)}}";
   var del_post_url = "{{=URL('api', 'del_post', user_signature=True)}}";
-  var unfollow_url = "{{=URL('api', 'unfollow', user_signature=True)}}";
-  var clear_follows_url = "{{=URL('api', 'clear_follows', user_signature=True)}}";
   var view_follows_url = "{{=URL('api', 'get_follows', user_signature=True)}}";
   var view_owned_url = "{{=URL('api', 'get_own', user_signature=True)}}";
   var update_post_url ="{{=URL('api', 'update_post', user_signature=True)}}";
@@ -84,9 +81,9 @@
                     <div class="dropdown ">
                     <button class="dropbtn">Sort ▼</button>
                     <div class="dropdown-content ">
-                        <a v-on:click="get_sorted_images(by_recent)">most recent</a>
-                        <a v-on:click="get_sorted_images(by_price_up)">price ↑</a>
-                        <a v-on:click="get_sorted_images(by_price_down)">price ↓</a>
+                        <a v-on:click="get_sorted_images('1')">most recent</a>
+                        <a v-on:click="get_sorted_images('2')">price ↑</a>
+                        <a v-on:click="get_sorted_images('3')">price ↓</a>
                     </div>
                      </div>
                     <div class="dropdown ">
@@ -118,10 +115,10 @@
 
                                 <div class="post_title">
                                     <a v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </a>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <p class = "quarter left" @click="show_item(image._idx)" >${image.title } </p>
                                     <p class = "white right">$${image.image_price}</p>
 
@@ -145,10 +142,10 @@
 
                                 <div class="strong">
                                     <p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </p>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
                                     <a @click="show_item(image._idx)" >${image.created_on} </a>
                                     <a class = "white ">$${image.image_price}</a>
@@ -180,10 +177,10 @@
                  class="main_page compressible max900 container ">
                 <div  class="left_side third left " >
                     <h6><p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </p>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button> ${image.title} - $${image.image_price} </h6>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button> ${image.title} - $${image.image_price} </h6>
                     <img v-if="image.image_url" v-bind:src="image.image_url" height="300px" width="350px" class="img_pad"/>
                     <img v-if="!image.image_url" src="{{=URL(r=request,c='static',f='images/no_pic.jpg')}}" height="250px" width="350px" class="img_pad"/>
                     <div class="accordion">
@@ -262,10 +259,10 @@
 
                                 <div class="strong">
                                     <a v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </a>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <p class = "quarter left" @click="show_item(image._idx)">${image.title } </p>
                                     <p class = "white right">$${image.image_price}</p>
 
@@ -289,10 +286,10 @@
 
                                 <div class="strong">
                                     <p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </p>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
                                     <a @click="show_item(image._idx)" >${image.created_on} </a>
                                     <a class = "white ">$${image.image_price}</a>
@@ -456,10 +453,10 @@
 
                                 <div class="strong">
                                     <a v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                     </a>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <p class = "quarter left" @click="edit_item(image._idx)">${image.title } </p>
                                     <p class = "white right">$${image.image_price}</p>
 
@@ -483,10 +480,10 @@
 
                                 <div class="strong">
                                     <p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </p>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
                                     <a @click="show_item(image._idx)" >${image.created_on} </a>
                                     <a class = "white ">$${image.image_price}</a>
@@ -622,10 +619,10 @@
 
                                 <div class="strong">
                                     <a v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </a>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <p class = "quarter left" @click="show_item(image._idx)">${image.title } </p>
                                     <p class = "white right">$${image.image_price}</p>
 
@@ -649,10 +646,10 @@
 
                                 <div class="strong">
                                     <p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="test_follow_post(image.id, 1)"></button>
+                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </p>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="test_follow_post(image.id, 0)"></button>
+                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
                                     <a @click="show_item(image._idx)" >${image.created_on} </a>
                                     <a class = "white ">$${image.image_price}</a>
