@@ -39,16 +39,16 @@ def get_images():
 
 def get_sorted_images():
     sortby = ~db.user_images.created_on
-    print('recieved flag '+request.vars.flag)
+    # print('recieved flag '+request.vars.flag)
     images = []
     if request.vars.flag is '1':
-        print("sort by recent")
+        #  print("sort by recent")
         sortby = ~db.user_images.created_on
     if request.vars.flag is '2':
-        print("sort by cost up")
+        #  print("sort by cost up")
         sortby = ~db.user_images.image_price
     if request.vars.flag is '3':
-        print("sort by cost down")
+        #  print("sort by cost down")
         sortby = db.user_images.image_price
     rows = db().select(db.user_images.ALL, orderby=sortby)
     for i, r in enumerate(rows):
@@ -71,13 +71,13 @@ def get_sorted_images():
 
 def get_follows():
     current_user = request.vars.user
-    print("getting follows for ", request.vars.user )
+    #  print("getting follows for ", request.vars.user )
     user_images = []
     rows = db().select(db.user_images.ALL)
     for i,r in enumerate(rows):
         if r.following_users:
             if current_user in r.following_users:
-                print("current user is follow id ",r.id)
+                #   print("current user is follow id ",r.id)
                 t = dict(
                     id=r.id,
                     image_url=r.image_url,
@@ -97,7 +97,7 @@ def get_follows():
 
 def get_own():
     current_user = request.vars.user
-    print("getting pics from ", request.vars.user )
+    # print("getting pics from ", request.vars.user )
     user_images = []
     rows = db().select(db.user_images.ALL)
     for i,r in enumerate(rows):
@@ -131,7 +131,7 @@ def log_user():
                 found= True
                 break
         if not found:
-            print("logged a new user")
+            #print("logged a new user")
             u_id = db.users.insert(user_email = grabbed_user)
             us = db.users(u_id)
             users = dict(user_email = grabbed_user, follows = ())
@@ -168,13 +168,13 @@ def add_image():
         call_ok = request.vars.call_ok,
 
     )
-    print(user_images)
+    #print(user_images)
     return response.json(dict(user_images=user_images))
 
 @auth.requires_signature()
 def update_post():
     if(request.vars.image_url):
-        print('image change')
+        # print('image change')
         db(db.user_images.id == request.vars.post_id).update(
             show_email=request.vars.show_email,
             image_url=request.vars.image_url,
@@ -186,7 +186,7 @@ def update_post():
             call_ok=request.vars.call_ok,
         )
     else:
-        print('no image change: ', request.vars.image_url);
+        #  print('no image change: ', request.vars.image_url);
         db(db.user_images.id == request.vars.post_id).update(
             show_email=request.vars.show_email,
             image_price=request.vars.image_price,
@@ -196,7 +196,7 @@ def update_post():
             text_ok=request.vars.text_ok,
             call_ok=request.vars.call_ok,
         )
-    print("updated post with new details")
+    #  print("updated post with new details")
     return "ok"
 
 @auth.requires_signature()
@@ -211,23 +211,23 @@ def follow():
         if temp_id == request.vars.image_id:
             if r.following_users:
                 temp_follows.extend(r.following_users)
-                print("following ", temp_follows)
+                # print("following ", temp_follows)
             if flag is '0':
                 if temp_follows.count(current_user) != 0:
-                    print("already followed")
+                    # print("already followed")
                     break
-                print(current_user , ' is now following id: ', temp_id)
+                    # print(current_user , ' is now following id: ', temp_id)
                 temp_follows.append(current_user)
             if flag is '1':
-                print("removing user follow: ",current_user)
+                # print("removing user follow: ",current_user)
                 if temp_follows.count(current_user) == 0:
-                    print("no instance found")
+                    # print("no instance found")
                     break
-                print(current_user , ' unfollowed id: ' , temp_id)
+                    #print(current_user , ' unfollowed id: ' , temp_id)
                 temp_follows.remove(current_user)
-        else:
-            print(temp_id , " didn't match " , request.vars.image_id)
-    print ("list of followers ", temp_follows)
+                #else:
+                #  print(temp_id , " didn't match " , request.vars.image_id)
+        #print ("list of followers ", temp_follows)
     db(db.user_images.id == request.vars.image_id).update(
         following_users = temp_follows
     )
@@ -236,7 +236,7 @@ def follow():
 @auth.requires_signature()
 def del_post():
     db(db.user_images.id == request.vars.post_id).delete()
-    print("picture gone")
+    #print("picture gone")
     return "ok"
 
 

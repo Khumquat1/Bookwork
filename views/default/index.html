@@ -1,9 +1,6 @@
 {{extend 'layout.html'}}
-
 {{block head}}
-
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
-
 <script>
   var add_image_url = "{{=URL('api', 'add_image', user_signature=True)}}";
   var add_image_url_np = "{{=URL('api', 'add_image_np', user_signature=True)}}";
@@ -19,87 +16,77 @@
   var update_post_url ="{{=URL('api', 'update_post', user_signature=True)}}";
 </script>
 
-
 {{end}}
 
 
 <div class="main_content">
-
-
-  <div id="vue-div" class="display:none">
-      <div v-if="intro_page">
-          <div class=" container max900 tester padded-T">
-              <h4 class = "center"> Easily sell or exchange used textbooks with your peers</h4>
-              <div class="intro_images container padded-Less padded-T">
-                  <img v-on:click="go_home()" class = " " src="{{=URL(r=request,c='static',f='images/book2.jpg')}}" height="275" width="350">
-              </div>
-              <div class="padded-L ">
-              <button v-on:click="go_home()" class = "large silver padded-T ">Browse or add posts </button>
-              </div>
-          </div>
-          <div class = "container max900 tester2">
-              <div class="explain container padded-T ">
-                  <img class = "third " src="{{=URL(r=request,c='static',f='images/test.jpg')}}" height="200" width="280">
-                  <img class = "third " src="{{=URL(r=request,c='static',f='images/one.jpg')}}" height="200" width="280">
-                  <img class = "third " src="{{=URL(r=request,c='static',f='images/3.jpg')}}" height="200" width="280">
-              </div>
-              <div class=" container textt">
-                  <div class = third>
-                      <h3 class = center >Step One</h3>
-                      <p class = center>Post a listing for a book</p>
+    <div id="vue-div" class="display:none">
+        <div v-if="intro_page">
+              <div class=" container max900 tester padded-T">
+                  <h2 class="center">Bookwork</h2>
+                  <h5 class = "center"> Easily sell or exchange used textbooks with your peers</h5>
+                  <div class="intro_images container padded-Less padded-T">
+                      <img v-on:click="go_home()" class = " " src="{{=URL(r=request,c='static',f='images/book2.jpg')}}" height="275" width="350">
                   </div>
-                  <div class = third>
-                      <h3 class = center >Step Two</h3>
-                      <p class = center>Arrange meeting with a potential buyer</p>
+                  <div class="padded-L ">
+                      <button v-on:click="go_home()" class = "large silver padded-T ">Browse or add posts </button>
                   </div>
-                  <div class = third>
-                      <h3 class = center >Step Three</h3>
-                      <p class = center>Make the transaction</p>
-                  </div>
-                  <h3 class="center pad-T">And that's it!</h3>
-                  <p class="center">Buying is even easier; Just browse the listings until you find what you'd like, then contact the seller.</p>
               </div>
-          </div>
-      </div>
+              <div class = "container max900 tester2">
+                  <div class="explain container padded-T ">
+                      <img class = "third " src="{{=URL(r=request,c='static',f='images/test.jpg')}}" height="200" width="280">
+                      <img class = "third " src="{{=URL(r=request,c='static',f='images/one.jpg')}}" height="200" width="280">
+                      <img class = "third " src="{{=URL(r=request,c='static',f='images/3.jpg')}}" height="200" width="280">
+                  </div>
+                  <div class=" container textt">
+                      <div class = third>
+                          <h3 class = center >Step One</h3>
+                          <p class = center>Post a listing for a book</p>
+                      </div>
+                      <div class = third>
+                          <h3 class = center >Step Two</h3>
+                          <p class = center>Arrange meeting with a potential buyer</p>
+                      </div>
+                      <div class = third>
+                          <h3 class = center >Step Three</h3>
+                          <p class = center>Make the transaction</p>
+                      </div>
+                      <h3 class="center pad-T">And that's it!</h3>
+                      <p class="center">Buying is even easier; Just browse the listings until you find what you'd like, then contact the seller.</p>
+                  </div>
+              </div>
+        </div>
 
         <div v-if="home_page">
             <div class=" container padded">
-
-                 <div class="container center half right">
-                     <button  v-on:click="go_post_page()" class=" fa fa-plus right white">   Post</button>
-                     <button v-if="logged_in" v-on:click="view_follows()" class=" fa fa-star right white">  Following </button>
-                         <button v-if="logged_in" v-on:click="view_owned()" class=" fa fa-edit right white">  Edit</button>
-
-                  <div class="half">
-                    <input type="text" v-model="search_input" class="fill" placeholder="search for a book">
-
+                <div class="container center half right">
+                    <button  v-on:click="go_post_page()" class=" fa fa-plus right white">   Post</button>
+                    <button v-if="logged_in" v-on:click="view_follows()" class=" fa fa-star right white">  Following </button>
+                    <button v-if="logged_in" v-on:click="view_owned()" class=" fa fa-edit right white">  Edit</button>
+                    <div class="half">
+                        <input type="text" v-model="search_input" class="fill" placeholder="search for a book">
                     </div>
                     <button class="gray fa fa-search" v-on:click='search_fields(search_input)'></button>
-                 </div>
-
+                </div>
                 <div class="container half padded-buttons">
                     <div class="dropdown ">
-                    <button class="dropbtn">Sort ▼</button>
-                    <div class="dropdown-content ">
-                        <a v-on:click="get_sorted_images('1')">most recent</a>
-                        <a v-on:click="get_sorted_images('2')">price ↑</a>
-                        <a v-on:click="get_sorted_images('3')">price ↓</a>
+                        <button class="dropbtn">Sort ▼</button>
+                        <div class="dropdown-content ">
+                            <a v-on:click="get_sorted_images('1')">most recent</a>
+                            <a v-on:click="get_sorted_images('2')">price ↑</a>
+                            <a v-on:click="get_sorted_images('3')">price ↓</a>
+                        </div>
                     </div>
-                     </div>
                     <div class="dropdown ">
-                    <button class="dropbtn">View ▼</button>
-                    <div class="dropdown-content ">
-                        <a class="fa fa-photo" v-on:click="view(1)">    gallery</a>
-                        <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
+                        <button class="dropbtn">View ▼</button>
+                        <div class="dropdown-content ">
+                            <a class="fa fa-photo" v-on:click="view(1)">    gallery</a>
+                            <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
+                        </div>
                     </div>
-                     </div>
                 </div>
-                <!-- Left part of the page -->
-                  <!-- Code to upload files, with control buttons -->
                 <div v-if="view_thumbnail" class="image_container">
-
                   <ul class="container">
-                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
                       <li v-for="image in user_images"  class="card lifted quarter spacedLR spaced container" id="post_images">
                           <a v-if="image.image_url">
                               <img @click="show_item(image._idx)" v-bind:src="image.image_url" height="230" width="260" class=" right spacedhalf "/>
@@ -107,140 +94,113 @@
                           </a>
                           <a v-if="!image.image_url">
                               <img @click="show_item(image._idx)" src="{{=URL(r=request,c='static',f='images/no_pic.jpg')}}" height="230" width="260" class=" right spacedhalf "/>
+                              ${image.created_on}
                           </a>
-
-
-                              <!--<button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>-->
-                              <div class="post_title  center ">
-
-                                <div class="post_title">
-                                    <a v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                          <div class="post_title  center ">
+                              <div class="post_title">
+                                  <a v-if="image.following_users">
+                                      <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                       <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </a>
                                   <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                    <p class = "quarter left" @click="show_item(image._idx)" >${image.title } </p>
-                                    <p class = "white right">$${image.image_price}</p>
-
-                                </div>
-
+                                  <p class = "quarter left" @click="show_item(image._idx)" >${image.title } </p>
+                                  <p class = "white right">$${image.image_price}</p>
                               </div>
-
-                          </p>
-
+                          </div>
                       </li>
                   </ul>
-
                 </div>
                 <div v-if="view_list" class="image_container padded-L">
                      <ul class="container">
-                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
                       <li v-for="image in user_images"  class=" container" id="post_images">
-
-                              <!--<button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>-->
-                              <div class="post_title ">
-
-                                <div class="strong">
-                                    <p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                          <div class="post_title ">
+                              <div class="strong">
+                                  <p v-if="image.following_users">
+                                      <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                       <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </p>
                                   <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                    <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
-                                    <a @click="show_item(image._idx)" >${image.created_on} </a>
-                                    <a class = "white ">$${image.image_price}</a>
-
-
-
-                                </div>
-
+                                  <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
+                                  <a @click="show_item(image._idx)" >${image.created_on} </a>
+                                  <a class = "white ">$${image.image_price}</a>
                               </div>
-
-                          </p>
-
+                          </div>
                       </li>
                   </ul>
-                  
-
                 </div>
-
             </div>
-
         </div>
-      <div v-if="item_page">
+
+        <div v-if="item_page">
             <div v-for="image in user_images" v-if="image._idx == selected_item_idx" class="top_bar_buttons">
-                    <button v-if="image._idx != 0" v-on:click="show_item(image._idx-1)"class="white left ">◀  prev </button>
-                    <button class="white" v-on:click="go_back()"> ▲ back </button>
-                    <button  v-if="image._idx+1 != max_id" v-on:click="show_item(image._idx+1)" class="white right"> next ▶ </button>
+                <button v-if="image._idx != 0" v-on:click="show_item(image._idx-1)"class="white left ">◀  prev </button>
+                <button class="white" v-on:click="go_back()"> ▲ back </button>
+                <button  v-if="image._idx+1 != max_id" v-on:click="show_item(image._idx+1)" class="white right"> next ▶ </button>
             </div>
             <div v-for="image in user_images" v-if="image._idx == selected_item_idx"
                  class="main_page compressible max900 container ">
-                <div  class="left_side third left " >
-                    <h6><p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
-                                  </p>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button> ${image.title} - $${image.image_price} </h6>
+                <div class="left_side third left " >
+                    <h6>
+                        <p v-if="image.following_users">
+                        <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                        <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
+                        </p>
+                        <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button> ${image.title} - $${image.image_price}
+                    </h6>
                     <img v-if="image.image_url" v-bind:src="image.image_url" height="300px" width="350px" class="img_pad"/>
                     <img v-if="!image.image_url" src="{{=URL(r=request,c='static',f='images/no_pic.jpg')}}" height="250px" width="350px" class="img_pad"/>
                     <div class="accordion">
                           <input type="checkbox" id="x04">
                           <label for="x04"><a class="white">Seller Info</a></label>
                           <div>
-                            <div  class="padded white">
-                             <p v-if='image.show_email'>Email: ${image.user_email}</p>
-                                <div v-if='image.phone_number'>
-                                        <p>Phone number: ${image.phone_number}</p>
-                                        <p v-if='image.text_ok'>Text ok</p>
-                                        <p v-if='image.call_ok'>Call ok</p>
-                                    </div>
-
-                            </div>
+                              <div  class="padded white">
+                                  <p v-if='image.show_email'>Email: ${image.user_email}</p>
+                                  <div v-if='image.phone_number'>
+                                      <p>Phone number: ${image.phone_number}</p>
+                                      <p v-if='image.text_ok'>Text ok</p>
+                                      <p v-if='image.call_ok'>Call ok</p>
+                                  </div>
+                              </div>
                           </div>
-                        </div>
+                    </div>
                 </div>
                 <div class="right_side twothirds right">
                     <div class="item_desc left">
                         <h6> Item details</h6>
                         <p class=" spaced preview ">${image.description} </p>
                         <p>Posted: ${image.created_on}</p>
-
                     </div>
                 </div>
-
             </div>
         </div>
-      <div v-if="search_page">
-          <div class=" container padded">
 
-                 <div class="container center half right">
-                     <button  v-on:click="go_post_page()" class=" fa fa-plus right white">   Post</button>
-                     <button  v-on:click="go_home()" class="fa fa-caret-square-o-left right white">   Return</button>
-                  <div class="half">
-                    <input type="text" v-model="search_input" class="fill" placeholder="search">
-
+        <div v-if="search_page">
+            <div class=" container padded">
+                <div class="container center half right">
+                    <button  v-on:click="go_post_page()" class=" fa fa-plus right white">   Post</button>
+                    <button  v-on:click="go_home()" class="fa fa-caret-square-o-left right white">   Return</button>
+                    <div class="half">
+                        <input type="text" v-model="search_input" class="fill" placeholder="search">
                     </div>
                     <button class="gray fa fa-search" v-on:click='search_fields(search_input)'></button>
-                 </div>
+                </div>
                 <div class="container half padded-buttons">
                     <div class="dropdown ">
-                    <button class="dropbtn">View ▼</button>
-                    <div class="dropdown-content ">
-                        <a class="fa fa-photo" v-on:click="view(1)">    gallery</a>
-                        <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
+                        <button class="dropbtn">View ▼</button>
+                        <div class="dropdown-content ">
+                            <a class="fa fa-photo" v-on:click="view(1)">    gallery</a>
+                            <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
+                        </div>
                     </div>
-                     </div>
                 </div>
-                <!-- Left part of the page -->
-                  <!-- Code to upload files, with control buttons -->
-              <h3 v-if="user_images.length != 0"> Your search returned with ${user_images.length} results.</h3>
-              <h3 v-if="user_images.length == 0"> Sorry, your search for "${local_search}" had no results.</h3>
-              <div v-if="user_images.length == 0">
+                <h3 v-if="user_images.length != 0"> Your search returned with ${user_images.length} results.</h3>
+                <h3 v-if="user_images.length == 0"> Sorry, your search for "${local_search}" had no results.</h3>
+                 <div v-if="user_images.length == 0">
                   <img @click="go_home()" src="{{=URL(r=request,c='static',f='images/fail.jpg')}}" height="230" width="260" class=" spaced "/>
                   <p>Please try again with different phrasing.</p>
 
               </div>
-                <div v-if="view_thumbnail" class="image_container">
+                 <div v-if="view_thumbnail" class="image_container">
 
                   <ul class="container">
                      <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
@@ -276,7 +236,7 @@
                   </ul>
 
                 </div>
-                <div v-if="view_list" class="image_container padded-L">
+                 <div v-if="view_list" class="image_container padded-L">
                      <ul class="container">
                      <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
                       <li v-for="image in user_images"  class=" container" id="post_images">
@@ -307,72 +267,63 @@
 
 
                 </div>
-
             </div>
       </div>
-      {{if auth.user is not None:}}
+
+    {{if auth.user is not None:}}
         <div v-if="post_page">
             <div class="container main max900">
                 <button v-on:click="go_home">back </button>
-                      <div class="title_cost container spaced">
-
-                          <div class="title half left">
-                          <p>Post Title</p>
-                          <input class="form-control string"  v-model="post_title"
-                                placeholder="Enter book name here" type="text" >
-                          </div>
-                          <div class="price quarter">
-                              <p>price</p>
-                              <input  v-model.number="image_price" placeholder="Enter the price:" type="number" step="any" min="0">
-                          </div>
-                      </div>
-
-                      <div class="body spaced">
-                          <textarea rows="10" class="form-control string "  v-model="post_description"
-                                placeholder="Enter description" type="text" ></textarea>
-                      </div>
-
-                    <div v-for="user in users" v-if="user.user_email == '{{=auth.user.email}}'" class="contact_info right">
-                        <div class="email_options">
-                            <p class="padded-LRT">User email: ${user.user_email} </p>
-                            <p class="padded-LR"> Hide email
-                                <input v-if="show_email" type="checkbox" v-on:click="toggle(3)">
-                                <input v-if="!show_email"  checked type="checkbox" v-on:click="toggle(3)">
-                            </p>
-                        </div>
-                        <div class="phone_options container  left">
-                            <div class="padded-LR">
-                                <input placeholder="Phone Number (optional)" type="text" v-model="post_phone_number">
-                            </div>
-                            <p class="padded-LR"> Text
-                                <input v-if="!text_ok" type="checkbox" v-on:click="toggle(1)">
-                                <input v-if="text_ok"  checked type="checkbox" v-on:click="toggle(1)">
-                                Call
-                                <input v-if="!call_ok"  type="checkbox" v-on:click="toggle(2)">
-                                <input v-if="call_ok" checked type="checkbox" v-on:click="toggle(2)">
-                            </p>
-                        </div>
+                <div class="title_cost container spaced">
+                    <div class="title half left">
+                        <p>Post Title</p>
+                        <input class="form-control string"  v-model="post_title" placeholder="Enter book name here" type="text" >
                     </div>
+                    <div class="price quarter">
+                        <p>price</p>
+                        <input  v-model.number="image_price" placeholder="Enter the price:" type="number" step="any" min="0">
+                    </div>
+                </div>
+                <div class="body spaced">
+                    <textarea rows="10" class="form-control string "  v-model="post_description" placeholder="Enter description" type="text" ></textarea>
+                </div>
+                <div v-for="user in users" v-if="user.user_email == '{{=auth.user.email}}'" class="contact_info right">
+                    <div class="email_options">
+                        <p class="padded-LRT">User email: ${user.user_email} </p>
+                        <p class="padded-LR"> Hide email
+                            <input v-if="show_email" type="checkbox" v-on:click="toggle(3)">
+                            <input v-if="!show_email"  checked type="checkbox" v-on:click="toggle(3)">
+                        </p>
+                    </div>
+                    <div class="phone_options container  left">
+                        <div class="padded-LR">
+                            <input placeholder="Phone Number (optional)" type="text" v-model="post_phone_number">
+                        </div>
+                        <p class="padded-LR"> Text
+                            <input v-if="!text_ok" type="checkbox" v-on:click="toggle(1)">
+                            <input v-if="text_ok"  checked type="checkbox" v-on:click="toggle(1)">
+                            Call
+                            <input v-if="!call_ok"  type="checkbox" v-on:click="toggle(2)">
+                            <input v-if="call_ok" checked type="checkbox" v-on:click="toggle(2)">
+                        </p>
+                    </div>
+                </div>
                 <button class="spaced"v-on:click="go_post_page_2">Continue</button>
-
             </div>
         </div>
 
         <div v-if="post_page_2">
             <div class="main_page container">
-
                 <div class="padded half ">
                     <button class="spaced" v-on:click="go_post_page">back</button>
                     <button class="spaced"v-on:click="add_post">Publish</button>
                     <div id="uploader_div">
-                    Upload an image file: <input id="file_input" type="file" accept="image/jpeg" v-on:change="upload_preview">
+                        Upload an image file: <input id="file_input" type="file" accept="image/jpeg" v-on:change="upload_preview">
                     </div>
                     <button v-if="preview_image" class="spaced" v-on:click="clear_preview">Use different image</button>
                 </div>
-
                 <div class=" publish_box container">
                     <p class="padded"> This is a preview of your post. You can choose to attach an image or publish as is.</p>
-
                 </div>
                 <div class="main_page compressible max900 container ">
                     <div  class="left_side third left " >
@@ -401,282 +352,203 @@
 
                         </div>
                     </div>
-
-            </div>
+                </div>
             </div>
         </div>
-      <div v-if="edit_page">
+
+        <div v-if="edit_page">
            <div class=" container padded">
-
-                 <div class="container center half right">
-                     <button  v-on:click="go_post_page()" class=" fa fa-plus right white">   Post</button>
-                     <button  v-on:click="go_home()" class="fa fa-caret-square-o-left right white">   Return</button>
-                  <div class="half">
-                    <input type="text" v-model="search_input" class="fill" placeholder="search">
-
-                    </div>
-                    <button class="gray fa fa-search" v-on:click='search_fields(search_input)'></button>
-                 </div>
-                <div class="container half padded-buttons">
+               <div class="container center half right">
+                   <button  v-on:click="go_post_page()" class=" fa fa-plus right white">   Post</button>
+                   <button  v-on:click="go_home()" class="fa fa-caret-square-o-left right white">   Return</button>
+                   <div class="half">
+                       <input type="text" v-model="search_input" class="fill" placeholder="search">
+                   </div>
+                   <button class="gray fa fa-search" v-on:click='search_fields(search_input)'></button>
+               </div>
+               <div class="container half padded-buttons">
                     <div class="dropdown ">
-                    <button class="dropbtn">View ▼</button>
-                    <div class="dropdown-content ">
-                        <a class="fa fa-photo" v-on:click="view(1)">    gallery</a>
-                        <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
+                        <button class="dropbtn">View ▼</button>
+                        <div class="dropdown-content ">
+                            <a class="fa fa-photo" v-on:click="view(1)">    gallery</a>
+                            <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
+                        </div>
                     </div>
-                     </div>
-                </div>
-                <!-- Left part of the page -->
-                  <!-- Code to upload files, with control buttons -->
-              <h3 class=" padded-buttons" v-if="user_images.length != 0"> Your posts</h3>
+               </div>
+               <h3 class=" padded-buttons" v-if="user_images.length != 0"> Your posts</h3>
                <p class = padded-buttons v-if="user_images.length != 0"> Click a post to edit</p>
-              <h3  v-if="user_images.length == 0"> You don't have any posts. Click return to go back.</h3>
-              <div v-if="user_images.length == 0">
+               <h3  v-if="user_images.length == 0"> You don't have any posts. Click return to go back.</h3>
+               <div v-if="user_images.length == 0">
                   <p>You need to own a post first to use this page.</p>
-              </div>
-                <div v-if="view_thumbnail" class="image_container">
-
+               </div>
+               <div v-if="view_thumbnail" class="image_container">
                   <ul class="container">
-                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
                       <li v-for="image in user_images"  class="card lifted quarter spacedLR spaced container" id="post_images">
                           <a v-if="image.image_url">
                               <img @click="edit_item(image._idx, image.id)" v-bind:src="image.image_url" height="230" width="260" class=" right spacedhalf "/>
                           </a>
                           <a v-if="!image.image_url">
                               <img @click="edit_item(image._idx, image.id)" src="{{=URL(r=request,c='static',f='images/no_pic.jpg')}}" height="230" width="260" class=" right spacedhalf "/>
-
                           </a>
-
-
-                              <!--<button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>-->
                               <div class="post_title  center ">
-
-                                <div class="strong">
-                                    <a v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
-                                    </a>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                    <p class = "quarter left" @click="edit_item(image._idx)">${image.title } </p>
-                                    <p class = "white right">$${image.image_price}</p>
-
-                                </div>
-
+                                  <div class="strong">
+                                      <a v-if="image.following_users">
+                                          <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                          <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
+                                      </a>
+                                      <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                      <p class = "quarter left" @click="edit_item(image._idx)">${image.title } </p>
+                                      <p class = "white right">$${image.image_price}</p>
+                                  </div>
                               </div>
-
-                          </p>
-
                       </li>
                   </ul>
-
-                </div>
-                <div v-if="view_list" class="image_container padded-L">
+               </div>
+               <div v-if="view_list" class="image_container padded-L">
                      <ul class="container">
-                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
-                      <li v-for="image in user_images"  class=" container" id="post_images">
-
-                              <!--<button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>-->
-                              <div class="post_title ">
-
+                         <li v-for="image in user_images"  class=" container" id="post_images">
+                             <div class="post_title ">
                                 <div class="strong">
                                     <p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
-                                  </p>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                        <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                        <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
+                                    </p>
+                                    <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
                                     <a @click="show_item(image._idx)" >${image.created_on} </a>
                                     <a class = "white ">$${image.image_price}</a>
-
-
-
                                 </div>
-
-                              </div>
-
-                          </p>
-
-                      </li>
-                  </ul>
-
-
-                </div>
-
-            </div>
+                             </div>
+                         </li>
+                     </ul>
+               </div>
+           </div>
         </div>
 
-      <div v-if="edit_item_page">
+        <div v-if="edit_item_page">
             <div class="container main max900">
                 <button class="	white fa fa-mail-reply" v-on:click="go_back()">  Cancel  </button>
                 <button class ="   fa fa-check-square-o" v-on:click="update_post()">  Save  </button>
                 <button class="	fa fa-trash" v-on:click="delete_post(post_id)"> Remove post </button>
-
-                      <div class="title_cost container spaced">
-                          <h2>Editing your post</h2>
-
-                          <div class="title half left">
-                          <p>Post Title</p>
-                          <input class="form-control string"  v-model="post_title"
-                                placeholder="Enter book name here" type="text" >
-                          </div>
-                          <div class="price quarter">
-                              <p>price</p>
-                              <input  v-model.number="image_price" placeholder="Enter the price:" type="number" step="any" min="0">
-                          </div>
-                      </div>
-
-                      <div class="body spaced">
-                          <textarea rows="10" class="form-control string "  v-model="post_description"
-                                placeholder="Enter description" type="text" ></textarea>
-                      </div>
-                <div v-for="user in users" v-if="user.user_email == '{{=auth.user.email}}'" class="contact_info right">
-                        <div class="email_options">
-                            <p class="padded-LRT">User email: ${user.user_email} </p>
-                            <p class="padded-LR"> Hide email
-                                <input v-if="show_email" type="checkbox" v-on:click="toggle(3)">
-                                <input v-if="!show_email"  checked type="checkbox" v-on:click="toggle(3)">
-                            </p>
-                        </div>
-
-                        <div class="phone_options container  left">
-                            <div class="padded-LR">
-                                <input placeholder="Phone Number (optional)" type="text" v-model="post_phone_number">
-                            </div>
-                            <p class="padded-LR"> Text
-                                <input v-if="!text_ok" type="checkbox" v-on:click="toggle(1)">
-                                <input v-if="text_ok"  checked type="checkbox" v-on:click="toggle(1)">
-                                Call
-                                <input v-if="!call_ok"  type="checkbox" v-on:click="toggle(2)">
-                                <input v-if="call_ok" checked type="checkbox" v-on:click="toggle(2)">
-                            </p>
-                        </div>
+                <div class="title_cost container spaced">
+                    <h2>Editing your post</h2>
+                    <div class="title half left">
+                        <p>Post Title</p>
+                        <input class="form-control string"  v-model="post_title" placeholder="Enter book name here" type="text" >
                     </div>
-                <div><button v-if="!change_image" v-on:click="new_image()">Change image</button>
+                    <div class="price quarter">
+                        <p>price</p>
+                        <input  v-model.number="image_price" placeholder="Enter the price:" type="number" step="any" min="0">
+                    </div>
+                </div>
+                <div class="body spaced">
+                    <textarea rows="10" class="form-control string "  v-model="post_description" placeholder="Enter description" type="text" ></textarea>
+                </div>
+                <div v-for="user in users" v-if="user.user_email == '{{=auth.user.email}}'" class="contact_info right">
+                    <div class="email_options">
+                        <p class="padded-LRT">User email: ${user.user_email} </p>
+                        <p class="padded-LR"> Hide email
+                            <input v-if="show_email" type="checkbox" v-on:click="toggle(3)">
+                            <input v-if="!show_email"  checked type="checkbox" v-on:click="toggle(3)">
+                        </p>
+                    </div>
+                    <div class="phone_options container  left">
+                        <div class="padded-LR">
+                            <input placeholder="Phone Number (optional)" type="text" v-model="post_phone_number">
+                        </div>
+                        <p class="padded-LR"> Text
+                            <input v-if="!text_ok" type="checkbox" v-on:click="toggle(1)">
+                            <input v-if="text_ok"  checked type="checkbox" v-on:click="toggle(1)">
+                            Call
+                            <input v-if="!call_ok"  type="checkbox" v-on:click="toggle(2)">
+                            <input v-if="call_ok" checked type="checkbox" v-on:click="toggle(2)">
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <button v-if="!change_image" v-on:click="new_image()">Change image</button>
                     <button v-if="change_image" v-on:click="cancel_new_image()">Cancel</button></div>
-
-                    <div class=" ">
-
-                            <div id="uploader_div2" style="display:none">
-                                Upload an image file: <input id="file_input" type="file" accept="image/jpeg" v-on:change="upload_preview">
-                                </div>
-                            <img id="output_image" v-if="preview_image" class="shrink"  alt="your image"/>
-                        <div v-if="image_url">
-                            <img v-if="!change_image" v-bind:src="image_url" height="230" width="260"/>
-                        </div>
-
-                        </div>
-
-
-
+                <div>
+                    <div id="uploader_div2" style="display:none">
+                        Upload an image file: <input id="file_input" class = "half" type="file" accept="image/jpeg" v-on:change="upload_preview">
+                    </div>
+                    <img id="output_image" v-if="preview_image" class="shrink"  alt="your image"/>
+                    <div v-if="image_url">
+                        <img v-if="!change_image" v-bind:src="image_url" height="230" width="260"/>
+                    </div>
+                </div>
             </div>
         </div>
 
-
-      <div v-if="follow_page">
+        <div v-if="follow_page">
           <div class=" container padded">
-
-                 <div class="container center half right">
-                     <button  v-on:click="go_post_page()" class=" fa fa-plus right white">   Post</button>
-                     <button  v-on:click="go_home()" class="fa fa-caret-square-o-left right white">   Return</button>
+              <div class="container center half right">
+                  <button  v-on:click="go_post_page()" class=" fa fa-plus right white">   Post</button>
+                  <button  v-on:click="go_home()" class="fa fa-caret-square-o-left right white">   Return</button>
                   <div class="half">
-                    <input type="text" v-model="search_input" class="fill" placeholder="search">
-
+                      <input type="text" v-model="search_input" class="fill" placeholder="search">
+                  </div>
+                  <button class="gray fa fa-search" v-on:click='search_fields(search_input)'></button>
+              </div>
+              <div class="container half padded-buttons">
+                  <div class="dropdown ">
+                      <button class="dropbtn">View ▼</button>
+                      <div class="dropdown-content ">
+                          <a class="fa fa-photo" v-on:click="view(1)">    gallery</a>
+                          <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
                     </div>
-                    <button class="gray fa fa-search" v-on:click='search_fields(search_input)'></button>
-                 </div>
-                <div class="container half padded-buttons">
-                    <div class="dropdown ">
-                    <button class="dropbtn">View ▼</button>
-                    <div class="dropdown-content ">
-                        <a class="fa fa-photo" v-on:click="view(1)">    gallery</a>
-                        <a class="fa fa-bars padded"v-on:click="view(2)">     list</a>
-                    </div>
-                     </div>
-                </div>
-                <!-- Left part of the page -->
-                  <!-- Code to upload files, with control buttons -->
+                  </div>
+              </div>
               <h3 class = "padded-buttons " v-if="user_images.length != 0"> Your followed posts</h3>
               <h3 v-if="user_images.length == 0"> You are currently following 0 posts. Click return to go back.</h3>
               <div v-if="user_images.length == 0">
                   <p>You need to follow a post first to use this page.</p>
               </div>
-                <div v-if="view_thumbnail" class="image_container">
-
-                  <ul class="container">
-                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
-                      <li v-for="image in user_images"  class="card lifted quarter spacedLR spaced container" id="post_images">
-                          <a v-if="image.image_url">
-                              <img @click="show_item(image._idx)" v-bind:src="image.image_url" height="230" width="260" class=" right spacedhalf "/>
-                          </a>
-                          <a v-if="!image.image_url">
-                              <img @click="show_item(image._idx)" src="{{=URL(r=request,c='static',f='images/no_pic.jpg')}}" height="230" width="260" class=" right spacedhalf "/>
-
-                          </a>
-
-
-                              <!--<button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>-->
-                              <div class="post_title  center ">
-
+              <div v-if="view_thumbnail" class="image_container">
+                    <ul class="container">
+                        <li v-for="image in user_images"  class="card lifted quarter spacedLR spaced container" id="post_images">
+                            <a v-if="image.image_url">
+                                <img @click="show_item(image._idx)" v-bind:src="image.image_url" height="230" width="260" class=" right spacedhalf "/>
+                            </a>
+                            <a v-if="!image.image_url">
+                                <img @click="show_item(image._idx)" src="{{=URL(r=request,c='static',f='images/no_pic.jpg')}}" height="230" width="260" class=" right spacedhalf "/>
+                            </a>
+                            <div class="post_title  center ">
                                 <div class="strong">
                                     <a v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
-                                  </a>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                        <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                        <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
+                                    </a>
+                                    <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <p class = "quarter left" @click="show_item(image._idx)">${image.title } </p>
                                     <p class = "white right">$${image.image_price}</p>
-
                                 </div>
-
-                              </div>
-
-                          </p>
-
-                      </li>
-                  </ul>
-
-                </div>
-                <div v-if="view_list" class="image_container padded-L">
-                     <ul class="container">
-                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
+                            </div>
+                        </li>
+                    </ul>
+              </div>
+              <div v-if="view_list" class="image_container padded-L">
+                  <ul class="container">
                       <li v-for="image in user_images"  class=" container" id="post_images">
-
-                              <!--<button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>-->
-                              <div class="post_title ">
-
-                                <div class="strong">
-                                    <p v-if="image.following_users">
+                          <div class="post_title ">
+                              <div class="strong">
+                                  <p v-if="image.following_users">
                                     <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                       <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
                                   </p>
                                   <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                    <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
-                                    <a @click="show_item(image._idx)" >${image.created_on} </a>
-                                    <a class = "white ">$${image.image_price}</a>
-
-
-
-                                </div>
-
+                                  <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
+                                  <a @click="show_item(image._idx)" >${image.created_on} </a>
+                                  <a class = "white ">$${image.image_price}</a>
                               </div>
-
-                          </p>
-
+                          </div>
                       </li>
                   </ul>
-
-
-                </div>
-
+              </div>
             </div>
       </div>
-
-
-
-
-  </div>
-{{pass}}
+    </div>
+    {{pass}}
 </div>
+
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
-
-</div>
