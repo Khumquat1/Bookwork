@@ -195,27 +195,22 @@
                 </div>
                 <h3 v-if="user_images.length != 0"> Your search returned with ${user_images.length} results.</h3>
                 <h3 v-if="user_images.length == 0"> Sorry, your search for "${local_search}" had no results.</h3>
-                 <div v-if="user_images.length == 0">
+                <div v-if="user_images.length == 0">
                   <img @click="go_home()" src="{{=URL(r=request,c='static',f='images/fail.jpg')}}" height="230" width="260" class=" spaced "/>
                   <p>Please try again with different phrasing.</p>
 
               </div>
-                 <div v-if="view_thumbnail" class="image_container">
-
-                  <ul class="container">
-                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
-                      <li v-for="image in user_images"  class="card lifted quarter spacedLR spaced container" id="post_images">
-                          <a v-if="image.image_url">
+                <div v-if="view_thumbnail" class="image_container">
+                    <ul class="container">
+                        <li v-for="image in user_images"  class="card lifted quarter spacedLR spaced container" id="post_images">
+                            <a v-if="image.image_url">
                               <img @click="show_item(image._idx)" v-bind:src="image.image_url" height="230" width="260" class=" right spacedhalf "/>
                           </a>
-                          <a v-if="!image.image_url">
+                            <a v-if="!image.image_url">
                               <img @click="show_item(image._idx)" src="{{=URL(r=request,c='static',f='images/no_pic.jpg')}}" height="230" width="260" class=" right spacedhalf "/>
 
                           </a>
-
-
-                              <!--<button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>-->
-                              <div class="post_title  center ">
+                            <div class="post_title  center ">
 
                                 <div class="strong">
                                     <a v-if="image.following_users">
@@ -229,43 +224,26 @@
                                 </div>
 
                               </div>
-
-                          </p>
-
-                      </li>
-                  </ul>
-
+                        </li>
+                    </ul>
                 </div>
-                 <div v-if="view_list" class="image_container padded-L">
-                     <ul class="container">
-                     <!-- <button v-on:click="clear_follows">Clear all follows</button>-->
-                      <li v-for="image in user_images"  class=" container" id="post_images">
-
-                              <!--<button class="left white small fa fa-trash-o" v-on:click="delete_post(image.id)"></button>-->
-                              <div class="post_title ">
-
+                <div v-if="view_list" class="image_container padded-L">
+                    <ul class="container">
+                        <li v-for="image in user_images"  class=" container" id="post_images">
+                            <div class="post_title ">
                                 <div class="strong">
                                     <p v-if="image.following_users">
-                                    <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
-                                      <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
-                                  </p>
-                                  <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                        <button v-if="!image.following_users.includes(current_user)" class=" left white  small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
+                                        <button v-if="image.following_users.includes(current_user)" class=" left white  small fa fa-star" v-on:click="follow_post(image.id, 1)"></button>
+                                    </p>
+                                    <button v-if="!image.following_users" class=" left white small fa fa-star-o" v-on:click="follow_post(image.id, 0)"></button>
                                     <a class = "quarter left" @click="show_item(image._idx)" >${image.title } </a>
                                     <a @click="show_item(image._idx)" >${image.created_on} </a>
                                     <a class = "white ">$${image.image_price}</a>
-
-
-
                                 </div>
-
-                              </div>
-
-                          </p>
-
-                      </li>
-                  </ul>
-
-
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
       </div>
@@ -428,8 +406,8 @@
         <div v-if="edit_item_page">
             <div class="container main max900">
                 <button class="	white fa fa-mail-reply" v-on:click="go_back()">  Cancel  </button>
-                <button class ="   fa fa-check-square-o" v-on:click="update_post()">  Save  </button>
-                <button class="	fa fa-trash" v-on:click="delete_post(post_id)"> Remove post </button>
+                <button class ="   fa fa-check-square-o green" v-on:click="update_post()">  Save  </button>
+                <button class="	fa fa-trash red" v-on:click="delete_post(post_id)"> Remove post </button>
                 <div class="title_cost container spaced">
                     <h2>Editing your post</h2>
                     <div class="title half left">

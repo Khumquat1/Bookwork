@@ -290,9 +290,10 @@ var app = function() {
     self.go_search_results = function(){
         self.vue.last_page = 'search';
         self.vue.home_page=false;
+        self.vue.item_page=false;
+        self.vue.follow_page=false;
+        self.vue.edit_page = false;
         self.vue.search_page = true;
-        self.vue.item_page=false
-
     };
 
     self.go_follow_page = function(){
